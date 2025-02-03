@@ -240,7 +240,21 @@ namespace GateSwitchWay
 
         private void mainToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            activateMainWindow();
+            if (this.Visible)
+            {
+                if (this.WindowState == FormWindowState.Minimized)
+                {
+                    activateMainWindow();
+                }
+                else
+                {
+                    this.Hide();
+                }
+            }
+            else
+            {
+                activateMainWindow();
+            }
         }
     }
 }
