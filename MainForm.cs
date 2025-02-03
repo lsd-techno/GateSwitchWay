@@ -1,12 +1,27 @@
 using Microsoft.Win32;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Net.NetworkInformation;
+using System.Net;
+using System.Linq;
 
 namespace GateSwitchWay
 {
     public partial class MainForm : Form
     {
         private static bool isAutoStartOn = false;
+
+        public struct NetworkInfo
+        {
+            public string Gateway4;
+            public string Gateway6;
+            public string Dns4;
+            public string Dns6;
+        }
+
+        private NetworkInfo currentNetworkInfo;
+        private NetworkInfo alternativeNetworkInfo;
+
         public MainForm()
         {
             InitializeComponent();
@@ -18,7 +33,8 @@ namespace GateSwitchWay
             notifyIcon1.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
             this.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
             //notifyIcon1.Icon = AppAutoStart.GetAutoStart() ? Res.gw64_yg_TEA_icon : Res.gw64_1_Jnv_icon;
-            notifyIcon1.Text = "GW: 172.16.x.x\rDNS: 172.16.x.x";// Setup the click timer
+            UpdateNetworkInfo(); // Call the method to update the network info on startup
+            DisplayNetworkInfo(currentNetworkInfo); // Display the current network info
 
             //
             clickTimer.Interval = SystemInformation.DoubleClickTime - 1; // Just under the double-click speed
@@ -43,9 +59,50 @@ namespace GateSwitchWay
                 };
             }
 
-
             // Register the MouseClick event
             this.notifyIcon1.MouseClick += new MouseEventHandler(notifyIcon1_MouseClick);
+        }
+
+        private void UpdateNetworkInfo()
+        {
+            currentNetworkInfo = new NetworkInfo
+            {
+                Gateway4 = "N/A",
+                Gateway6 = "N/A",
+                Dns4 = "N/A",
+                Dns6 = "N/A"
+            };
+
+            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (ni.OperationalStatus == OperationalStatus.Up && ni.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+                {
+                    IPInterfaceProperties ipProps = ni.GetIPProperties();
+
+                    // Get the gateway addresses
+                    var gateway4 = ipProps.GatewayAddresses
+                        .FirstOrDefault(g => g.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+                    var gateway6 = ipProps.GatewayAddresses
+                        .FirstOrDefault(g => g.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6);
+                    currentNetworkInfo.Gateway4 = gateway4?.Address.ToString() ?? "N/A";
+                    currentNetworkInfo.Gateway6 = gateway6?.Address.ToString() ?? "N/A";
+
+                    // Get the DNS addresses
+                    var dnsAddress4 = ipProps.DnsAddresses
+                        .FirstOrDefault(d => d.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+                    var dnsAddress6 = ipProps.DnsAddresses
+                        .FirstOrDefault(d => d.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6);
+                    currentNetworkInfo.Dns4 = dnsAddress4?.ToString() ?? "N/A";
+                    currentNetworkInfo.Dns6 = dnsAddress6?.ToString() ?? "N/A";
+
+                    break; // Use the first active network interface
+                }
+            }
+        }
+
+        private void DisplayNetworkInfo(NetworkInfo networkInfo)
+        {
+            notifyIcon1.Text = $"GW4: {networkInfo.Gateway4}\rGW6: {networkInfo.Gateway6}\rDNS4: {networkInfo.Dns4}\rDNS6: {networkInfo.Dns6}";
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
