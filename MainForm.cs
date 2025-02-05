@@ -68,13 +68,20 @@ namespace GateSwitchWay
             this.notifyIcon1.MouseClick += new MouseEventHandler(notifyIcon1_MouseClick);
 
             // Hide main window if startHidden is true
-            //this.Text = $"start hodden: {startHidden}";
             if (startHidden)
             {
                 this.Hide();
             }
         }
-
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            // Hide main window if startHidden is true
+            if (startHidden)
+            {
+                this.Hide();
+            }
+        }
         private void UpdateNetworkInfo()
         {
             currentNetworkInfo = new NetworkInfo
