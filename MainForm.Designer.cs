@@ -49,7 +49,7 @@
             // contextMenuStrip1
             // 
             contextMenuStrip1.BackColor = SystemColors.ButtonShadow;
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { mainToolStripMenuItem, autoStartMenu, toolStripSeparator1, exitToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { mainToolStripMenuItem, startHiddenMenu, autoStartMenu, toolStripSeparator1, exitToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
             contextMenuStrip1.Size = new Size(181, 98);
             // 
@@ -59,6 +59,14 @@
             mainToolStripMenuItem.Size = new Size(180, 22);
             mainToolStripMenuItem.Text = "Main";
             mainToolStripMenuItem.Click += mainToolStripMenuItem_Click;
+            // 
+            // startHiddenMenuItem
+            // 
+            startHiddenMenu = new ToolStripMenuItem();
+            startHiddenMenu.Name = "startHiddenMenu";
+            startHiddenMenu.Size = new Size(180, 22);
+            startHiddenMenu.Text = "Start Hidden";
+            startHiddenMenu.Click += startHiddenMenu_Click;
             // 
             // autoStartMenu
             // 
@@ -103,5 +111,6 @@
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripMenuItem autoStartMenu;
+        private ToolStripMenuItem startHiddenMenu;
     }
 }

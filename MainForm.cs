@@ -10,6 +10,7 @@ namespace GateSwitchWay
     public partial class MainForm : Form
     {
         private static bool isAutoStartOn = false;
+        private static bool startHidden = false;
 
         public struct NetworkInfo
         {
@@ -27,7 +28,10 @@ namespace GateSwitchWay
             InitializeComponent();
             //contextMenuStrip1.Renderer = new DarkModeToolStripRenderer();
             isAutoStartOn = AppAutoStart.GetAutoStart();
-            autoStartMenu.Checked = AppAutoStart.GetAutoStart();
+            autoStartMenu.Checked = isAutoStartOn;
+
+            startHidden = Settings.Default.StartHidden;
+            startHiddenMenu.Checked = startHidden;
 
             isSwitchedOn = false;
             notifyIcon1.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
@@ -56,11 +60,18 @@ namespace GateSwitchWay
                 {
                     UpdateContextMenuTheme(notifyIcon1.ContextMenuStrip);
                     autoStartMenu.Checked = AppAutoStart.GetAutoStart();
+                    mainToolStripMenuItem.Checked = this.Visible;
                 };
             }
 
             // Register the MouseClick event
             this.notifyIcon1.MouseClick += new MouseEventHandler(notifyIcon1_MouseClick);
+
+            // Hide main window if startHidden is true
+            if (startHidden)
+            {
+                this.Hide();
+            }
         }
 
         private void UpdateNetworkInfo()
@@ -312,6 +323,13 @@ namespace GateSwitchWay
             {
                 activateMainWindow();
             }
+        }
+        private void startHiddenMenu_Click(object sender, EventArgs e)
+        {
+            startHidden = !startHidden;
+            startHiddenMenu.Checked = startHidden;
+            Settings.Default.StartHidden = startHidden;
+            Settings.Default.Save();
         }
     }
 }
