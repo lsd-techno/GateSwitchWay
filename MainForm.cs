@@ -38,7 +38,7 @@ namespace GateSwitchWay
             this.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
             //notifyIcon1.Icon = AppAutoStart.GetAutoStart() ? Res.gw64_yg_TEA_icon : Res.gw64_1_Jnv_icon;
             UpdateNetworkInfo(); // Call the method to update the network info on startup
-            DisplayNetworkInfo(currentNetworkInfo); // Display the current network info
+            UpdateTBNetworkInfo(currentNetworkInfo); // Display the current network info
 
             //
             clickTimer.Interval = SystemInformation.DoubleClickTime - 1; // Just under the double-click speed
@@ -119,9 +119,10 @@ namespace GateSwitchWay
             }
         }
 
-        private void DisplayNetworkInfo(NetworkInfo networkInfo)
+        // Update taskbar network info
+        private void UpdateTBNetworkInfo(NetworkInfo networkInfo)
         {
-            notifyIcon1.Text = $"GW4: {networkInfo.Gateway4}\rGW6: {networkInfo.Gateway6}\rDNS4: {networkInfo.Dns4}\rDNS6: {networkInfo.Dns6}";
+            notifyIcon1.Text = $"{(isSwitchedOn ? "AlterNative GW" : "Native GW")}\rGW4: {networkInfo.Gateway4}\rGW6: {networkInfo.Gateway6}\rDNS4: {networkInfo.Dns4}\rDNS6: {networkInfo.Dns6}";
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -256,7 +257,10 @@ namespace GateSwitchWay
             notifyIcon1.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
             this.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
 
-            this.Text = isSwitchedOn ? "Switched On" : "Switched Off";
+            this.Text = isSwitchedOn ? "AlterNative GateWay" : "Native GateWay";
+
+            // Update network info to be consitent with current mode
+            UpdateTBNetworkInfo(currentNetworkInfo);
         }
 
         private static bool currentLightThemeEnabled = false;
