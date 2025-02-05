@@ -68,6 +68,7 @@ namespace GateSwitchWay
             this.notifyIcon1.MouseClick += new MouseEventHandler(notifyIcon1_MouseClick);
 
             // Hide main window if startHidden is true
+            //this.Text = $"start hodden: {startHidden}";
             if (startHidden)
             {
                 this.Hide();

@@ -33,6 +33,7 @@
             notifyIcon1 = new NotifyIcon(components);
             contextMenuStrip1 = new ContextMenuStrip(components);
             mainToolStripMenuItem = new ToolStripMenuItem();
+            startHiddenMenu = new ToolStripMenuItem();
             autoStartMenu = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             exitToolStripMenuItem = new ToolStripMenuItem();
@@ -51,21 +52,24 @@
             contextMenuStrip1.BackColor = SystemColors.ButtonShadow;
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { mainToolStripMenuItem, startHiddenMenu, autoStartMenu, toolStripSeparator1, exitToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 98);
+            contextMenuStrip1.Size = new Size(181, 120);
             // 
             // mainToolStripMenuItem
             // 
+            mainToolStripMenuItem.Checked = true;
+            mainToolStripMenuItem.CheckState = CheckState.Checked;
             mainToolStripMenuItem.Name = "mainToolStripMenuItem";
             mainToolStripMenuItem.Size = new Size(180, 22);
             mainToolStripMenuItem.Text = "Main";
             mainToolStripMenuItem.Click += mainToolStripMenuItem_Click;
             // 
-            // startHiddenMenuItem
+            // startHiddenMenu
             // 
-            startHiddenMenu = new ToolStripMenuItem();
+            startHiddenMenu.Checked = true;
+            startHiddenMenu.CheckState = CheckState.Checked;
             startHiddenMenu.Name = "startHiddenMenu";
             startHiddenMenu.Size = new Size(180, 22);
-            startHiddenMenu.Text = "Start Hidden";
+            startHiddenMenu.Text = "StartHidden";
             startHiddenMenu.Click += startHiddenMenu_Click;
             // 
             // autoStartMenu
