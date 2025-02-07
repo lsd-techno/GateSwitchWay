@@ -39,6 +39,9 @@ namespace GateSwitchWay
             //notifyIcon1.Icon = AppAutoStart.GetAutoStart() ? Res.gw64_yg_TEA_icon : Res.gw64_1_Jnv_icon;
             UpdateNetworkInfo(); // Call the method to update the network info on startup
             UpdateTBNetworkInfo(currentNetworkInfo); // Display the current network info
+            PopulateCurrentNetworkInfo();
+            LoadAlterNativeSettings();
+            PopulateNativeNetworkInfo();
 
             //
             clickTimer.Interval = SystemInformation.DoubleClickTime - 1; // Just under the double-click speed
@@ -237,6 +240,49 @@ namespace GateSwitchWay
                 clickTimer.Start(); // Start the delay timer
             }
         }
+        private void PopulateNativeNetworkInfo()
+        {
+            textBoxNativeGw4.Text = currentNetworkInfo.Gateway4;
+            textBoxNativeGw6.Text = currentNetworkInfo.Gateway6;
+            textBoxNativeDns4.Text = currentNetworkInfo.Dns4;
+            textBoxNativeDns6.Text = currentNetworkInfo.Dns6;
+        }
+
+        private void PopulateCurrentNetworkInfo()
+        {
+            textBoxCurrentGw4.Text = currentNetworkInfo.Gateway4;
+            textBoxCurrentGw6.Text = currentNetworkInfo.Gateway6;
+            textBoxCurrentDns4.Text = currentNetworkInfo.Dns4;
+            textBoxCurrentDns6.Text = currentNetworkInfo.Dns6;
+        }
+
+        private void LoadAlterNativeSettings()
+        {
+            textBoxGw4.Text = Settings.Default.AlterNativeGw4;
+            textBoxGw6.Text = Settings.Default.AlterNativeGw6;
+            textBoxDns4.Text = Settings.Default.AlterNativeDns4;
+            textBoxDns6.Text = Settings.Default.AlterNativeDns6;
+
+            checkBoxGw4.Checked = Settings.Default.AlterNativeGw4Enabled;
+            checkBoxGw6.Checked = Settings.Default.AlterNativeGw6Enabled;
+            checkBoxDns4.Checked = Settings.Default.AlterNativeDns4Enabled;
+            checkBoxDns6.Checked = Settings.Default.AlterNativeDns6Enabled;
+        }
+
+        private void SaveAlterNativeSettings()
+        {
+            Settings.Default.AlterNativeGw4 = textBoxGw4.Text;
+            Settings.Default.AlterNativeGw6 = textBoxGw6.Text;
+            Settings.Default.AlterNativeDns4 = textBoxDns4.Text;
+            Settings.Default.AlterNativeDns6 = textBoxDns6.Text;
+
+            Settings.Default.AlterNativeGw4Enabled = checkBoxGw4.Checked;
+            Settings.Default.AlterNativeGw6Enabled = checkBoxGw6.Checked;
+            Settings.Default.AlterNativeDns4Enabled = checkBoxDns4.Checked;
+            Settings.Default.AlterNativeDns6Enabled = checkBoxDns6.Checked;
+
+            Settings.Default.Save();
+        }
 
         private void activateMainWindow()
         {
@@ -344,6 +390,44 @@ namespace GateSwitchWay
             startHiddenMenu.Checked = startHidden;
             Settings.Default.StartHidden = startHidden;
             Settings.Default.Save();
+        }
+        private void CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            if (checkBox != null)
+            {
+                switch (checkBox.Name)
+                {
+                    case "checkBoxGw4":
+                        textBoxGw4.Enabled = checkBox.Checked;
+                        break;
+                    case "checkBoxGw6":
+                        textBoxGw6.Enabled = checkBox.Checked;
+                        break;
+                    case "checkBoxDns4":
+                        textBoxDns4.Enabled = checkBox.Checked;
+                        break;
+                    case "checkBoxDns6":
+                        textBoxDns6.Enabled = checkBox.Checked;
+                        break;
+                }
+                switch (checkBox.Name)
+                {
+                    case "checkBoxGw4":
+                    case "checkBoxGw6":
+                    case "checkBoxDns4":
+                    case "checkBoxDns6":
+                        SaveAlterNativeSettings();
+                        break;
+                }
+            }
+        }
+        private void AlterCheckBoxes_ReEnable()
+        {
+            textBoxGw4.Enabled = checkBoxGw4.Checked;
+            textBoxGw6.Enabled = checkBoxGw6.Checked;
+            textBoxDns4.Enabled = checkBoxDns4.Checked;
+            textBoxDns6.Enabled = checkBoxDns6.Checked;
         }
     }
 }

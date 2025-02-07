@@ -34,5 +34,101 @@ namespace GateSwitchWay {
                 this["StartHidden"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AlterNativeGw4Enabled {
+            get {
+                return ((bool)(this["AlterNativeGw4Enabled"]));
+            }
+            set {
+                this["AlterNativeGw4Enabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("N/A")]
+        public string AlterNativeGw4 {
+            get {
+                return ((string)(this["AlterNativeGw4"]));
+            }
+            set {
+                this["AlterNativeGw4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AlterNativeGw6Enabled {
+            get {
+                return ((bool)(this["AlterNativeGw6Enabled"]));
+            }
+            set {
+                this["AlterNativeGw6Enabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("N/A")]
+        public string AlterNativeGw6 {
+            get {
+                return ((string)(this["AlterNativeGw6"]));
+            }
+            set {
+                this["AlterNativeGw6"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AlterNativeDns4Enabled {
+            get {
+                return ((bool)(this["AlterNativeDns4Enabled"]));
+            }
+            set {
+                this["AlterNativeDns4Enabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("N/A")]
+        public string AlterNativeDns4 {
+            get {
+                return ((string)(this["AlterNativeDns4"]));
+            }
+            set {
+                this["AlterNativeDns4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AlterNativeDns6Enabled {
+            get {
+                return ((bool)(this["AlterNativeDns6Enabled"]));
+            }
+            set {
+                this["AlterNativeDns6Enabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("N/A")]
+        public string AlterNativeDns6 {
+            get {
+                return ((string)(this["AlterNativeDns6"]));
+            }
+            set {
+                this["AlterNativeDns6"] = value;
+            }
+        }
     }
 }

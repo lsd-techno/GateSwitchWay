@@ -6,25 +6,6 @@
         ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private GroupBox groupBoxNative;
-        private GroupBox groupBoxAlterNative;
-        private GroupBox groupBoxCurrent;
-        private CheckBox checkBoxGw4;
-        private CheckBox checkBoxGw6;
-        private CheckBox checkBoxDns4;
-        private CheckBox checkBoxDns6;
-        private TextBox textBoxGw4;
-        private TextBox textBoxGw6;
-        private TextBox textBoxDns4;
-        private TextBox textBoxDns6;
-        private TextBox textBoxNativeGw4;
-        private TextBox textBoxNativeGw6;
-        private TextBox textBoxNativeDns4;
-        private TextBox textBoxNativeDns6;
-        private TextBox textBoxCurrentGw4;
-        private TextBox textBoxCurrentGw6;
-        private TextBox textBoxCurrentDns4;
-        private TextBox textBoxCurrentDns6;
         /// <summary>
         ///  Clean up any resources being used.
         /// </summary>
@@ -334,38 +315,7 @@
             ResumeLayout(false);
         }
 
-        private void CheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            CheckBox checkBox = sender as CheckBox;
-            if (checkBox != null)
-            {
-                switch (checkBox.Name)
-                {
-                    case "checkBoxGw4":
-                        textBoxGw4.Enabled = checkBox.Checked;
-                        break;
-                    case "checkBoxGw6":
-                        textBoxGw6.Enabled = checkBox.Checked;
-                        break;
-                    case "checkBoxDns4":
-                        textBoxDns4.Enabled = checkBox.Checked;
-                        break;
-                    case "checkBoxDns6":
-                        textBoxDns6.Enabled = checkBox.Checked;
-                        break;
-                }
-            }
-        }
-        private void AlterCheckBoxes_ReEnable()
-        {
-            textBoxGw4.Enabled = checkBoxGw4.Checked;
-            textBoxGw6.Enabled = checkBoxGw6.Checked;
-            textBoxDns4.Enabled = checkBoxDns4.Checked;
-            textBoxDns6.Enabled = checkBoxDns6.Checked;
-        }
-
         #endregion
-
         private NotifyIcon notifyIcon1;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem mainToolStripMenuItem;
@@ -373,5 +323,24 @@
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripMenuItem autoStartMenu;
         private ToolStripMenuItem startHiddenMenu;
+        private GroupBox groupBoxNative;
+        private GroupBox groupBoxAlterNative;
+        private GroupBox groupBoxCurrent;
+        private CheckBox checkBoxGw4;
+        private CheckBox checkBoxGw6;
+        private CheckBox checkBoxDns4;
+        private CheckBox checkBoxDns6;
+        private TextBox textBoxGw4;
+        private TextBox textBoxGw6;
+        private TextBox textBoxDns4;
+        private TextBox textBoxDns6;
+        private TextBox textBoxNativeGw4;
+        private TextBox textBoxNativeGw6;
+        private TextBox textBoxNativeDns4;
+        private TextBox textBoxNativeDns6;
+        private TextBox textBoxCurrentGw4;
+        private TextBox textBoxCurrentGw6;
+        private TextBox textBoxCurrentDns4;
+        private TextBox textBoxCurrentDns6;
     }
 }
