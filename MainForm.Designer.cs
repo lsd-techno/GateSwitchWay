@@ -37,9 +37,13 @@
             toolStripSeparator1 = new ToolStripSeparator();
             exitToolStripMenuItem = new ToolStripMenuItem();
             groupBoxNative = new GroupBox();
+            labelNativeGw4 = new Label();
             textBoxNativeGw4 = new TextBox();
+            labelNativeGw6 = new Label();
             textBoxNativeGw6 = new TextBox();
+            labelNativeDns4 = new Label();
             textBoxNativeDns4 = new TextBox();
+            labelNativeDns6 = new Label();
             textBoxNativeDns6 = new TextBox();
             groupBoxAlterNative = new GroupBox();
             checkBoxGw4 = new CheckBox();
@@ -51,9 +55,13 @@
             textBoxDns4 = new TextBox();
             textBoxDns6 = new TextBox();
             groupBoxCurrent = new GroupBox();
+            labelCurrentGw4 = new Label();
             textBoxCurrentGw4 = new TextBox();
+            labelCurrentGw6 = new Label();
             textBoxCurrentGw6 = new TextBox();
+            labelCurrentDns4 = new Label();
             textBoxCurrentDns4 = new TextBox();
+            labelCurrentDns6 = new Label();
             textBoxCurrentDns6 = new TextBox();
             contextMenuStrip1.SuspendLayout();
             groupBoxNative.SuspendLayout();
@@ -117,47 +125,83 @@
             // 
             // groupBoxNative
             // 
+            groupBoxNative.Controls.Add(labelNativeGw4);
             groupBoxNative.Controls.Add(textBoxNativeGw4);
+            groupBoxNative.Controls.Add(labelNativeGw6);
             groupBoxNative.Controls.Add(textBoxNativeGw6);
+            groupBoxNative.Controls.Add(labelNativeDns4);
             groupBoxNative.Controls.Add(textBoxNativeDns4);
+            groupBoxNative.Controls.Add(labelNativeDns6);
             groupBoxNative.Controls.Add(textBoxNativeDns6);
             groupBoxNative.Location = new Point(12, 12);
             groupBoxNative.Name = "groupBoxNative";
-            groupBoxNative.Size = new Size(200, 150);
+            groupBoxNative.Size = new Size(240, 150);
             groupBoxNative.TabIndex = 0;
             groupBoxNative.TabStop = false;
             groupBoxNative.Text = "Native";
             // 
+            // labelNativeGw4
+            // 
+            labelNativeGw4.Location = new Point(6, 22);
+            labelNativeGw4.Name = "labelNativeGw4";
+            labelNativeGw4.Size = new Size(60, 24);
+            labelNativeGw4.TabIndex = 0;
+            labelNativeGw4.Text = "GW4:";
+            // 
             // textBoxNativeGw4
             // 
-            textBoxNativeGw4.Location = new Point(6, 22);
+            textBoxNativeGw4.Location = new Point(72, 22);
             textBoxNativeGw4.Name = "textBoxNativeGw4";
             textBoxNativeGw4.ReadOnly = true;
-            textBoxNativeGw4.Size = new Size(188, 23);
+            textBoxNativeGw4.Size = new Size(160, 23);
             textBoxNativeGw4.TabIndex = 0;
+            // 
+            // labelNativeGw6
+            // 
+            labelNativeGw6.Location = new Point(6, 52);
+            labelNativeGw6.Name = "labelNativeGw6";
+            labelNativeGw6.Size = new Size(60, 24);
+            labelNativeGw6.TabIndex = 2;
+            labelNativeGw6.Text = "GW6:";
             // 
             // textBoxNativeGw6
             // 
-            textBoxNativeGw6.Location = new Point(6, 52);
+            textBoxNativeGw6.Location = new Point(72, 52);
             textBoxNativeGw6.Name = "textBoxNativeGw6";
             textBoxNativeGw6.ReadOnly = true;
-            textBoxNativeGw6.Size = new Size(188, 23);
+            textBoxNativeGw6.Size = new Size(160, 23);
             textBoxNativeGw6.TabIndex = 1;
+            // 
+            // labelNativeDns4
+            // 
+            labelNativeDns4.Location = new Point(6, 82);
+            labelNativeDns4.Name = "labelNativeDns4";
+            labelNativeDns4.Size = new Size(60, 24);
+            labelNativeDns4.TabIndex = 4;
+            labelNativeDns4.Text = "DNS4:";
             // 
             // textBoxNativeDns4
             // 
-            textBoxNativeDns4.Location = new Point(6, 82);
+            textBoxNativeDns4.Location = new Point(72, 82);
             textBoxNativeDns4.Name = "textBoxNativeDns4";
             textBoxNativeDns4.ReadOnly = true;
-            textBoxNativeDns4.Size = new Size(188, 23);
+            textBoxNativeDns4.Size = new Size(160, 23);
             textBoxNativeDns4.TabIndex = 2;
+            // 
+            // labelNativeDns6
+            // 
+            labelNativeDns6.Location = new Point(6, 112);
+            labelNativeDns6.Name = "labelNativeDns6";
+            labelNativeDns6.Size = new Size(60, 24);
+            labelNativeDns6.TabIndex = 6;
+            labelNativeDns6.Text = "DNS6:";
             // 
             // textBoxNativeDns6
             // 
-            textBoxNativeDns6.Location = new Point(6, 112);
+            textBoxNativeDns6.Location = new Point(72, 112);
             textBoxNativeDns6.Name = "textBoxNativeDns6";
             textBoxNativeDns6.ReadOnly = true;
-            textBoxNativeDns6.Size = new Size(188, 23);
+            textBoxNativeDns6.Size = new Size(160, 23);
             textBoxNativeDns6.TabIndex = 3;
             // 
             // groupBoxAlterNative
@@ -170,9 +214,9 @@
             groupBoxAlterNative.Controls.Add(textBoxGw6);
             groupBoxAlterNative.Controls.Add(textBoxDns4);
             groupBoxAlterNative.Controls.Add(textBoxDns6);
-            groupBoxAlterNative.Location = new Point(277, 12);
+            groupBoxAlterNative.Location = new Point(320, 12);
             groupBoxAlterNative.Name = "groupBoxAlterNative";
-            groupBoxAlterNative.Size = new Size(200, 150);
+            groupBoxAlterNative.Size = new Size(240, 150);
             groupBoxAlterNative.TabIndex = 1;
             groupBoxAlterNative.TabStop = false;
             groupBoxAlterNative.Text = "AlterNative";
@@ -181,7 +225,7 @@
             // 
             checkBoxGw4.Location = new Point(6, 22);
             checkBoxGw4.Name = "checkBoxGw4";
-            checkBoxGw4.Size = new Size(80, 24);
+            checkBoxGw4.Size = new Size(60, 24);
             checkBoxGw4.TabIndex = 0;
             checkBoxGw4.Text = "GW4";
             checkBoxGw4.CheckedChanged += CheckBox_CheckedChanged;
@@ -190,7 +234,7 @@
             // 
             checkBoxGw6.Location = new Point(6, 52);
             checkBoxGw6.Name = "checkBoxGw6";
-            checkBoxGw6.Size = new Size(80, 24);
+            checkBoxGw6.Size = new Size(60, 24);
             checkBoxGw6.TabIndex = 1;
             checkBoxGw6.Text = "GW6";
             checkBoxGw6.CheckedChanged += CheckBox_CheckedChanged;
@@ -199,7 +243,7 @@
             // 
             checkBoxDns4.Location = new Point(6, 82);
             checkBoxDns4.Name = "checkBoxDns4";
-            checkBoxDns4.Size = new Size(80, 24);
+            checkBoxDns4.Size = new Size(60, 24);
             checkBoxDns4.TabIndex = 2;
             checkBoxDns4.Text = "DNS4";
             checkBoxDns4.CheckedChanged += CheckBox_CheckedChanged;
@@ -208,7 +252,7 @@
             // 
             checkBoxDns6.Location = new Point(6, 112);
             checkBoxDns6.Name = "checkBoxDns6";
-            checkBoxDns6.Size = new Size(80, 24);
+            checkBoxDns6.Size = new Size(60, 24);
             checkBoxDns6.TabIndex = 3;
             checkBoxDns6.Text = "DNS6";
             checkBoxDns6.CheckedChanged += CheckBox_CheckedChanged;
@@ -216,78 +260,114 @@
             // textBoxGw4
             // 
             textBoxGw4.Enabled = false;
-            textBoxGw4.Location = new Point(92, 22);
+            textBoxGw4.Location = new Point(72, 22);
             textBoxGw4.Name = "textBoxGw4";
-            textBoxGw4.Size = new Size(100, 23);
+            textBoxGw4.Size = new Size(162, 23);
             textBoxGw4.TabIndex = 4;
             // 
             // textBoxGw6
             // 
             textBoxGw6.Enabled = false;
-            textBoxGw6.Location = new Point(92, 52);
+            textBoxGw6.Location = new Point(72, 52);
             textBoxGw6.Name = "textBoxGw6";
-            textBoxGw6.Size = new Size(100, 23);
+            textBoxGw6.Size = new Size(162, 23);
             textBoxGw6.TabIndex = 5;
             // 
             // textBoxDns4
             // 
             textBoxDns4.Enabled = false;
-            textBoxDns4.Location = new Point(92, 82);
+            textBoxDns4.Location = new Point(72, 82);
             textBoxDns4.Name = "textBoxDns4";
-            textBoxDns4.Size = new Size(100, 23);
+            textBoxDns4.Size = new Size(162, 23);
             textBoxDns4.TabIndex = 6;
             // 
             // textBoxDns6
             // 
             textBoxDns6.Enabled = false;
-            textBoxDns6.Location = new Point(92, 112);
+            textBoxDns6.Location = new Point(72, 112);
             textBoxDns6.Name = "textBoxDns6";
-            textBoxDns6.Size = new Size(100, 23);
+            textBoxDns6.Size = new Size(162, 23);
             textBoxDns6.TabIndex = 7;
             // 
             // groupBoxCurrent
             // 
+            groupBoxCurrent.Controls.Add(labelCurrentGw4);
             groupBoxCurrent.Controls.Add(textBoxCurrentGw4);
+            groupBoxCurrent.Controls.Add(labelCurrentGw6);
             groupBoxCurrent.Controls.Add(textBoxCurrentGw6);
+            groupBoxCurrent.Controls.Add(labelCurrentDns4);
             groupBoxCurrent.Controls.Add(textBoxCurrentDns4);
+            groupBoxCurrent.Controls.Add(labelCurrentDns6);
             groupBoxCurrent.Controls.Add(textBoxCurrentDns6);
             groupBoxCurrent.Location = new Point(12, 181);
             groupBoxCurrent.Name = "groupBoxCurrent";
-            groupBoxCurrent.Size = new Size(200, 150);
+            groupBoxCurrent.Size = new Size(240, 150);
             groupBoxCurrent.TabIndex = 2;
             groupBoxCurrent.TabStop = false;
             groupBoxCurrent.Text = "Current";
             // 
+            // labelCurrentGw4
+            // 
+            labelCurrentGw4.Location = new Point(6, 22);
+            labelCurrentGw4.Name = "labelCurrentGw4";
+            labelCurrentGw4.Size = new Size(60, 24);
+            labelCurrentGw4.TabIndex = 0;
+            labelCurrentGw4.Text = "GW4:";
+            // 
             // textBoxCurrentGw4
             // 
-            textBoxCurrentGw4.Location = new Point(6, 22);
+            textBoxCurrentGw4.Location = new Point(72, 22);
             textBoxCurrentGw4.Name = "textBoxCurrentGw4";
             textBoxCurrentGw4.ReadOnly = true;
-            textBoxCurrentGw4.Size = new Size(188, 23);
+            textBoxCurrentGw4.Size = new Size(160, 23);
             textBoxCurrentGw4.TabIndex = 0;
+            // 
+            // labelCurrentGw6
+            // 
+            labelCurrentGw6.Location = new Point(6, 52);
+            labelCurrentGw6.Name = "labelCurrentGw6";
+            labelCurrentGw6.Size = new Size(60, 24);
+            labelCurrentGw6.TabIndex = 2;
+            labelCurrentGw6.Text = "GW6:";
             // 
             // textBoxCurrentGw6
             // 
-            textBoxCurrentGw6.Location = new Point(6, 52);
+            textBoxCurrentGw6.Location = new Point(72, 52);
             textBoxCurrentGw6.Name = "textBoxCurrentGw6";
             textBoxCurrentGw6.ReadOnly = true;
-            textBoxCurrentGw6.Size = new Size(188, 23);
+            textBoxCurrentGw6.Size = new Size(160, 23);
             textBoxCurrentGw6.TabIndex = 1;
+            // 
+            // labelCurrentDns4
+            // 
+            labelCurrentDns4.Location = new Point(6, 82);
+            labelCurrentDns4.Name = "labelCurrentDns4";
+            labelCurrentDns4.Size = new Size(60, 24);
+            labelCurrentDns4.TabIndex = 4;
+            labelCurrentDns4.Text = "DNS4:";
             // 
             // textBoxCurrentDns4
             // 
-            textBoxCurrentDns4.Location = new Point(6, 82);
+            textBoxCurrentDns4.Location = new Point(72, 82);
             textBoxCurrentDns4.Name = "textBoxCurrentDns4";
             textBoxCurrentDns4.ReadOnly = true;
-            textBoxCurrentDns4.Size = new Size(188, 23);
+            textBoxCurrentDns4.Size = new Size(160, 23);
             textBoxCurrentDns4.TabIndex = 2;
+            // 
+            // labelCurrentDns6
+            // 
+            labelCurrentDns6.Location = new Point(6, 112);
+            labelCurrentDns6.Name = "labelCurrentDns6";
+            labelCurrentDns6.Size = new Size(60, 24);
+            labelCurrentDns6.TabIndex = 6;
+            labelCurrentDns6.Text = "DNS6:";
             // 
             // textBoxCurrentDns6
             // 
-            textBoxCurrentDns6.Location = new Point(6, 112);
+            textBoxCurrentDns6.Location = new Point(72, 112);
             textBoxCurrentDns6.Name = "textBoxCurrentDns6";
             textBoxCurrentDns6.ReadOnly = true;
-            textBoxCurrentDns6.Size = new Size(188, 23);
+            textBoxCurrentDns6.Size = new Size(160, 23);
             textBoxCurrentDns6.TabIndex = 3;
             // 
             // MainForm
@@ -326,6 +406,7 @@
         private GroupBox groupBoxNative;
         private GroupBox groupBoxAlterNative;
         private GroupBox groupBoxCurrent;
+        // AlterNative settings
         private CheckBox checkBoxGw4;
         private CheckBox checkBoxGw6;
         private CheckBox checkBoxDns4;
@@ -342,5 +423,15 @@
         private TextBox textBoxCurrentGw6;
         private TextBox textBoxCurrentDns4;
         private TextBox textBoxCurrentDns6;
+
+        // Native and Current field names
+        private Label labelNativeGw4;
+        private Label labelNativeGw6;
+        private Label labelNativeDns4;
+        private Label labelNativeDns6;
+        private Label labelCurrentGw4;
+        private Label labelCurrentGw6;
+        private Label labelCurrentDns4;
+        private Label labelCurrentDns6;
     }
 }
