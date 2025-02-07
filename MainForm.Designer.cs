@@ -381,7 +381,6 @@
             Controls.Add(groupBoxNative);
             Controls.Add(groupBoxAlterNative);
             Controls.Add(groupBoxCurrent);
-            FormBorderStyle = FormBorderStyle.Fixed3D;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
             Text = "GateSwitchWay";
