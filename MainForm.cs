@@ -76,6 +76,8 @@ namespace GateSwitchWay
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
+            // Update AlterNative settings display
+            AlterCheckBoxes_ReEnable();
             // Hide main window if startHidden is true
             if (startHidden)
             {
