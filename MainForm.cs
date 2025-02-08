@@ -298,32 +298,25 @@ namespace GateSwitchWay
         }
         private void CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            CheckBox checkBox = sender as CheckBox;
+            CheckBox? checkBox = sender as CheckBox;
             if (checkBox != null)
             {
+                bool needSave = false;
                 switch (checkBox.Name)
                 {
                     case "checkBoxGw4":
-                        textBoxGw4.Enabled = checkBox.Checked;
-                        break;
                     case "checkBoxGw6":
-                        textBoxGw6.Enabled = checkBox.Checked;
-                        break;
                     case "checkBoxDns4":
-                        textBoxDns4.Enabled = checkBox.Checked;
-                        break;
                     case "checkBoxDns6":
-                        textBoxDns6.Enabled = checkBox.Checked;
-                        break;
+                        {
+                            AlterCheckBoxes_ReEnable();
+                            needSave = true;
+                            break;
+                        }
                 }
-                switch (checkBox.Name)
+                if (needSave)
                 {
-                    case "checkBoxGw4":
-                    case "checkBoxGw6":
-                    case "checkBoxDns4":
-                    case "checkBoxDns6":
-                        NetworkHelper.SaveAlterNativeSettings(textBoxGw4, textBoxGw6, textBoxDns4, textBoxDns6, checkBoxGw4, checkBoxGw6, checkBoxDns4, checkBoxDns6);
-                        break;
+                    NetworkHelper.SaveAlterNativeSettings(textBoxGw4, textBoxGw6, textBoxDns4, textBoxDns6, checkBoxGw4, checkBoxGw6, checkBoxDns4, checkBoxDns6);
                 }
             }
         }
