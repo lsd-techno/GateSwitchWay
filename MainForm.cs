@@ -11,6 +11,7 @@ namespace GateSwitchWay
     {
         private static bool isAutoStartOn = false;
         private static bool startHidden = false;
+        private static bool isLoadingSettings = false;
 
         private NetworkHelper.NetworkInfo currentNetworkInfo;
         private NetworkHelper.NetworkInfo alternativeNetworkInfo;
@@ -31,7 +32,9 @@ namespace GateSwitchWay
             currentNetworkInfo = NetworkHelper.GetCurrentNetworkInfo(); // Call the method to update the network info on startup
             NetworkHelper.UpdateTaskbarNetworkInfo(currentNetworkInfo, notifyIcon1, isSwitchedOn); // Display the current network info
             NetworkHelper.PopulateNetworkInfoTextBoxes(currentNetworkInfo, textBoxCurrentGw4, textBoxCurrentGw6, textBoxCurrentDns4, textBoxCurrentDns6);
+            isLoadingSettings = true;
             NetworkHelper.LoadAlterNativeSettings(textBoxGw4, textBoxGw6, textBoxDns4, textBoxDns6, checkBoxGw4, checkBoxGw6, checkBoxDns4, checkBoxDns6);
+            isLoadingSettings = false;
             NetworkHelper.PopulateNetworkInfoTextBoxes(currentNetworkInfo, textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6);
 
             clickTimer.Interval = SystemInformation.DoubleClickTime - 1; // Just under the double-click speed
@@ -314,9 +317,12 @@ namespace GateSwitchWay
                             break;
                         }
                 }
-                if (needSave)
+                if (!isLoadingSettings)
                 {
-                    NetworkHelper.SaveAlterNativeSettings(textBoxGw4, textBoxGw6, textBoxDns4, textBoxDns6, checkBoxGw4, checkBoxGw6, checkBoxDns4, checkBoxDns6);
+                    if (needSave)
+                    {
+                        NetworkHelper.SaveAlterNativeSettings(textBoxGw4, textBoxGw6, textBoxDns4, textBoxDns6, checkBoxGw4, checkBoxGw6, checkBoxDns4, checkBoxDns6);
+                    }
                 }
             }
         }
