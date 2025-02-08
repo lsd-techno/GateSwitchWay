@@ -12,21 +12,12 @@ namespace GateSwitchWay
         private static bool isAutoStartOn = false;
         private static bool startHidden = false;
 
-        public struct NetworkInfo
-        {
-            public string Gateway4;
-            public string Gateway6;
-            public string Dns4;
-            public string Dns6;
-        }
-
-        private NetworkInfo currentNetworkInfo;
-        private NetworkInfo alternativeNetworkInfo;
+        private NetworkHelper.NetworkInfo currentNetworkInfo;
+        private NetworkHelper.NetworkInfo alternativeNetworkInfo;
 
         public MainForm()
         {
             InitializeComponent();
-            //contextMenuStrip1.Renderer = new DarkModeToolStripRenderer();
             isAutoStartOn = AppAutoStart.GetAutoStart();
             autoStartMenu.Checked = isAutoStartOn;
 
@@ -36,14 +27,13 @@ namespace GateSwitchWay
             isSwitchedOn = false;
             notifyIcon1.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
             this.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
-            //notifyIcon1.Icon = AppAutoStart.GetAutoStart() ? Res.gw64_yg_TEA_icon : Res.gw64_1_Jnv_icon;
-            UpdateNetworkInfo(); // Call the method to update the network info on startup
-            UpdateTBNetworkInfo(currentNetworkInfo); // Display the current network info
-            PopulateCurrentNetworkInfo();
-            LoadAlterNativeSettings();
-            PopulateNativeNetworkInfo();
 
-            //
+            currentNetworkInfo = NetworkHelper.GetCurrentNetworkInfo(); // Call the method to update the network info on startup
+            NetworkHelper.UpdateTaskbarNetworkInfo(currentNetworkInfo, notifyIcon1, isSwitchedOn); // Display the current network info
+            NetworkHelper.PopulateNetworkInfoTextBoxes(currentNetworkInfo, textBoxCurrentGw4, textBoxCurrentGw6, textBoxCurrentDns4, textBoxCurrentDns6);
+            NetworkHelper.LoadAlterNativeSettings(textBoxGw4, textBoxGw6, textBoxDns4, textBoxDns6, checkBoxGw4, checkBoxGw6, checkBoxDns4, checkBoxDns6);
+            NetworkHelper.PopulateNetworkInfoTextBoxes(currentNetworkInfo, textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6);
+
             clickTimer.Interval = SystemInformation.DoubleClickTime - 1; // Just under the double-click speed
             clickTimer.Tick += (s, e) =>
             {
@@ -76,6 +66,7 @@ namespace GateSwitchWay
                 this.Hide();
             }
         }
+
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
@@ -86,48 +77,6 @@ namespace GateSwitchWay
             {
                 this.Hide();
             }
-        }
-        private void UpdateNetworkInfo()
-        {
-            currentNetworkInfo = new NetworkInfo
-            {
-                Gateway4 = "N/A",
-                Gateway6 = "N/A",
-                Dns4 = "N/A",
-                Dns6 = "N/A"
-            };
-
-            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
-            {
-                if (ni.OperationalStatus == OperationalStatus.Up && ni.NetworkInterfaceType != NetworkInterfaceType.Loopback)
-                {
-                    IPInterfaceProperties ipProps = ni.GetIPProperties();
-
-                    // Get the gateway addresses
-                    var gateway4 = ipProps.GatewayAddresses
-                        .FirstOrDefault(g => g.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
-                    var gateway6 = ipProps.GatewayAddresses
-                        .FirstOrDefault(g => g.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6);
-                    currentNetworkInfo.Gateway4 = gateway4?.Address.ToString() ?? "N/A";
-                    currentNetworkInfo.Gateway6 = gateway6?.Address.ToString() ?? "N/A";
-
-                    // Get the DNS addresses
-                    var dnsAddress4 = ipProps.DnsAddresses
-                        .FirstOrDefault(d => d.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
-                    var dnsAddress6 = ipProps.DnsAddresses
-                        .FirstOrDefault(d => d.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6);
-                    currentNetworkInfo.Dns4 = dnsAddress4?.ToString() ?? "N/A";
-                    currentNetworkInfo.Dns6 = dnsAddress6?.ToString() ?? "N/A";
-
-                    break; // Use the first active network interface
-                }
-            }
-        }
-
-        // Update taskbar network info
-        private void UpdateTBNetworkInfo(NetworkInfo networkInfo)
-        {
-            notifyIcon1.Text = $"{(isSwitchedOn ? "AlterNative GW" : "Native GW")}\rGW4: {networkInfo.Gateway4}\rGW6: {networkInfo.Gateway6}\rDNS4: {networkInfo.Dns4}\rDNS6: {networkInfo.Dns6}";
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -240,49 +189,6 @@ namespace GateSwitchWay
                 clickTimer.Start(); // Start the delay timer
             }
         }
-        private void PopulateNativeNetworkInfo()
-        {
-            textBoxNativeGw4.Text = currentNetworkInfo.Gateway4;
-            textBoxNativeGw6.Text = currentNetworkInfo.Gateway6;
-            textBoxNativeDns4.Text = currentNetworkInfo.Dns4;
-            textBoxNativeDns6.Text = currentNetworkInfo.Dns6;
-        }
-
-        private void PopulateCurrentNetworkInfo()
-        {
-            textBoxCurrentGw4.Text = currentNetworkInfo.Gateway4;
-            textBoxCurrentGw6.Text = currentNetworkInfo.Gateway6;
-            textBoxCurrentDns4.Text = currentNetworkInfo.Dns4;
-            textBoxCurrentDns6.Text = currentNetworkInfo.Dns6;
-        }
-
-        private void LoadAlterNativeSettings()
-        {
-            textBoxGw4.Text = Settings.Default.AlterNativeGw4;
-            textBoxGw6.Text = Settings.Default.AlterNativeGw6;
-            textBoxDns4.Text = Settings.Default.AlterNativeDns4;
-            textBoxDns6.Text = Settings.Default.AlterNativeDns6;
-
-            checkBoxGw4.Checked = Settings.Default.AlterNativeGw4Enabled;
-            checkBoxGw6.Checked = Settings.Default.AlterNativeGw6Enabled;
-            checkBoxDns4.Checked = Settings.Default.AlterNativeDns4Enabled;
-            checkBoxDns6.Checked = Settings.Default.AlterNativeDns6Enabled;
-        }
-
-        private void SaveAlterNativeSettings()
-        {
-            Settings.Default.AlterNativeGw4 = textBoxGw4.Text;
-            Settings.Default.AlterNativeGw6 = textBoxGw6.Text;
-            Settings.Default.AlterNativeDns4 = textBoxDns4.Text;
-            Settings.Default.AlterNativeDns6 = textBoxDns6.Text;
-
-            Settings.Default.AlterNativeGw4Enabled = checkBoxGw4.Checked;
-            Settings.Default.AlterNativeGw6Enabled = checkBoxGw6.Checked;
-            Settings.Default.AlterNativeDns4Enabled = checkBoxDns4.Checked;
-            Settings.Default.AlterNativeDns6Enabled = checkBoxDns6.Checked;
-
-            Settings.Default.Save();
-        }
 
         private void activateMainWindow()
         {
@@ -307,8 +213,8 @@ namespace GateSwitchWay
 
             this.Text = isSwitchedOn ? "AlterNative GateWay" : "Native GateWay";
 
-            // Update network info to be consitent with current mode
-            UpdateTBNetworkInfo(currentNetworkInfo);
+            // Update network info to be consistent with current mode
+            NetworkHelper.UpdateTaskbarNetworkInfo(currentNetworkInfo, notifyIcon1, isSwitchedOn);
         }
 
         private static bool currentLightThemeEnabled = false;
@@ -329,7 +235,6 @@ namespace GateSwitchWay
                     }
                 }
             }
-            //currentDarkThemeEnabled = false;
             return currentLightThemeEnabled; // Default to dark theme if unable to read the registry
         }
         private void UpdateContextMenuTheme(ContextMenuStrip contextMenu)
@@ -345,7 +250,7 @@ namespace GateSwitchWay
                 contextMenu.ForeColor = Color.LightGray; // Light text
             }
 
-            // add dark mode custom renderer to display menu items propely
+            // add dark mode custom renderer to display menu items properly
             contextMenu.Renderer = IsLightThemeEnabled() ? new ToolStripProfessionalRenderer() : new DarkModeToolStripRenderer();
         }
 
@@ -417,7 +322,7 @@ namespace GateSwitchWay
                     case "checkBoxGw6":
                     case "checkBoxDns4":
                     case "checkBoxDns6":
-                        SaveAlterNativeSettings();
+                        NetworkHelper.SaveAlterNativeSettings(textBoxGw4, textBoxGw6, textBoxDns4, textBoxDns6, checkBoxGw4, checkBoxGw6, checkBoxDns4, checkBoxDns6);
                         break;
                 }
             }
