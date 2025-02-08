@@ -35,6 +35,7 @@ namespace GateSwitchWay
             isLoadingSettings = true;
             NetworkHelper.LoadAlterNativeSettings(textBoxGw4, textBoxGw6, textBoxDns4, textBoxDns6, checkBoxGw4, checkBoxGw6, checkBoxDns4, checkBoxDns6);
             isLoadingSettings = false;
+            TrackBar_Set(isSwitchedOn);
             NetworkHelper.PopulateNetworkInfoTextBoxes(currentNetworkInfo, textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6);
 
             clickTimer.Interval = SystemInformation.DoubleClickTime - 1; // Just under the double-click speed
@@ -75,6 +76,8 @@ namespace GateSwitchWay
             base.OnShown(e);
             // Update AlterNative settings display
             AlterCheckBoxes_ReEnable();
+            DisplayCurrentMode(isSwitchedOn);
+            TrackBar_Set(isSwitchedOn);
             // Hide main window if startHidden is true
             if (startHidden)
             {
@@ -218,6 +221,9 @@ namespace GateSwitchWay
 
             // Update network info to be consistent with current mode
             NetworkHelper.UpdateTaskbarNetworkInfo(currentNetworkInfo, notifyIcon1, isSwitchedOn);
+            // Update the display of the current mode
+            DisplayCurrentMode(isSwitchedOn);
+            TrackBar_Set(isSwitchedOn);
         }
 
         private static bool currentLightThemeEnabled = false;
@@ -332,6 +338,45 @@ namespace GateSwitchWay
             textBoxGw6.Enabled = checkBoxGw6.Checked;
             textBoxDns4.Enabled = checkBoxDns4.Checked;
             textBoxDns6.Enabled = checkBoxDns6.Checked;
+        }
+        private void TrackBarToggle_ValueChanged(object sender, EventArgs e)
+        {
+            if (!isLoadingSettings)
+            {
+                if (trackBarToggle.Value == 0)
+                {
+                    if (isSwitchedOn)
+                    {
+                        ToggleSwitch();
+                    }
+                }
+                else
+                {
+                    if (!isSwitchedOn)
+                    {
+                        ToggleSwitch();
+                    }
+                }
+            }
+        }
+        private void TrackBar_Set(bool isSwitchedOn)
+        {
+            isLoadingSettings = true;
+            trackBarToggle.Value = isSwitchedOn ? 1 : 0; // Set the trackbar value to match the current mode
+            isLoadingSettings = false;
+        }
+        private void DisplayCurrentMode(bool isSwitchedOn)
+        {
+            if (isSwitchedOn)
+            {
+                groupBoxAlterNative.Font = new Font(groupBoxAlterNative.Font, FontStyle.Bold);
+                groupBoxNative.Font = new Font(groupBoxNative.Font, FontStyle.Regular);
+            }
+            else
+            {
+                groupBoxAlterNative.Font = new Font(groupBoxAlterNative.Font, FontStyle.Regular);
+                groupBoxNative.Font = new Font(groupBoxNative.Font, FontStyle.Bold);
+            }
         }
     }
 }

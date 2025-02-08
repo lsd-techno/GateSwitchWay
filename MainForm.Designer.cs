@@ -63,10 +63,12 @@
             textBoxCurrentDns4 = new TextBox();
             labelCurrentDns6 = new Label();
             textBoxCurrentDns6 = new TextBox();
+            trackBarToggle = new TrackBar();
             contextMenuStrip1.SuspendLayout();
             groupBoxNative.SuspendLayout();
             groupBoxAlterNative.SuspendLayout();
             groupBoxCurrent.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBarToggle).BeginInit();
             SuspendLayout();
             // 
             // notifyIcon1
@@ -133,6 +135,7 @@
             groupBoxNative.Controls.Add(textBoxNativeDns4);
             groupBoxNative.Controls.Add(labelNativeDns6);
             groupBoxNative.Controls.Add(textBoxNativeDns6);
+            groupBoxNative.Font = new Font("Segoe UI", 9F);
             groupBoxNative.Location = new Point(12, 12);
             groupBoxNative.Name = "groupBoxNative";
             groupBoxNative.Size = new Size(240, 150);
@@ -370,6 +373,16 @@
             textBoxCurrentDns6.Size = new Size(160, 23);
             textBoxCurrentDns6.TabIndex = 3;
             // 
+            // trackBarToggle
+            // 
+            trackBarToggle.Location = new Point(258, 64);
+            trackBarToggle.Maximum = 1;
+            trackBarToggle.Name = "trackBarToggle";
+            trackBarToggle.Size = new Size(56, 45);
+            trackBarToggle.TabIndex = 1;
+            trackBarToggle.TickStyle = TickStyle.None;
+            trackBarToggle.ValueChanged += TrackBarToggle_ValueChanged;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -379,6 +392,7 @@
             BackColor = SystemColors.ButtonShadow;
             ClientSize = new Size(800, 450);
             Controls.Add(groupBoxNative);
+            Controls.Add(trackBarToggle);
             Controls.Add(groupBoxAlterNative);
             Controls.Add(groupBoxCurrent);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -391,7 +405,9 @@
             groupBoxAlterNative.PerformLayout();
             groupBoxCurrent.ResumeLayout(false);
             groupBoxCurrent.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBarToggle).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -422,6 +438,9 @@
         private TextBox textBoxCurrentGw6;
         private TextBox textBoxCurrentDns4;
         private TextBox textBoxCurrentDns6;
+
+        // Toggle bar
+        private TrackBar trackBarToggle;
 
         // Native and Current field names
         private Label labelNativeGw4;
