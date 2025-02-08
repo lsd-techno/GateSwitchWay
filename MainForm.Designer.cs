@@ -138,7 +138,7 @@
             groupBoxNative.Font = new Font("Segoe UI", 9F);
             groupBoxNative.Location = new Point(12, 12);
             groupBoxNative.Name = "groupBoxNative";
-            groupBoxNative.Size = new Size(240, 150);
+            groupBoxNative.Size = new Size(270, 150);
             groupBoxNative.TabIndex = 0;
             groupBoxNative.TabStop = false;
             groupBoxNative.Text = "Native";
@@ -156,7 +156,7 @@
             textBoxNativeGw4.Location = new Point(72, 22);
             textBoxNativeGw4.Name = "textBoxNativeGw4";
             textBoxNativeGw4.ReadOnly = true;
-            textBoxNativeGw4.Size = new Size(160, 23);
+            textBoxNativeGw4.Size = new Size(192, 23);
             textBoxNativeGw4.TabIndex = 0;
             // 
             // labelNativeGw6
@@ -172,7 +172,7 @@
             textBoxNativeGw6.Location = new Point(72, 52);
             textBoxNativeGw6.Name = "textBoxNativeGw6";
             textBoxNativeGw6.ReadOnly = true;
-            textBoxNativeGw6.Size = new Size(160, 23);
+            textBoxNativeGw6.Size = new Size(192, 23);
             textBoxNativeGw6.TabIndex = 1;
             // 
             // labelNativeDns4
@@ -188,7 +188,7 @@
             textBoxNativeDns4.Location = new Point(72, 82);
             textBoxNativeDns4.Name = "textBoxNativeDns4";
             textBoxNativeDns4.ReadOnly = true;
-            textBoxNativeDns4.Size = new Size(160, 23);
+            textBoxNativeDns4.Size = new Size(192, 23);
             textBoxNativeDns4.TabIndex = 2;
             // 
             // labelNativeDns6
@@ -204,7 +204,7 @@
             textBoxNativeDns6.Location = new Point(72, 112);
             textBoxNativeDns6.Name = "textBoxNativeDns6";
             textBoxNativeDns6.ReadOnly = true;
-            textBoxNativeDns6.Size = new Size(160, 23);
+            textBoxNativeDns6.Size = new Size(192, 23);
             textBoxNativeDns6.TabIndex = 3;
             // 
             // groupBoxAlterNative
@@ -217,9 +217,9 @@
             groupBoxAlterNative.Controls.Add(textBoxGw6);
             groupBoxAlterNative.Controls.Add(textBoxDns4);
             groupBoxAlterNative.Controls.Add(textBoxDns6);
-            groupBoxAlterNative.Location = new Point(320, 12);
+            groupBoxAlterNative.Location = new Point(351, 12);
             groupBoxAlterNative.Name = "groupBoxAlterNative";
-            groupBoxAlterNative.Size = new Size(240, 150);
+            groupBoxAlterNative.Size = new Size(270, 150);
             groupBoxAlterNative.TabIndex = 1;
             groupBoxAlterNative.TabStop = false;
             groupBoxAlterNative.Text = "AlterNative";
@@ -265,7 +265,7 @@
             textBoxGw4.Enabled = false;
             textBoxGw4.Location = new Point(72, 22);
             textBoxGw4.Name = "textBoxGw4";
-            textBoxGw4.Size = new Size(162, 23);
+            textBoxGw4.Size = new Size(192, 23);
             textBoxGw4.TabIndex = 4;
             // 
             // textBoxGw6
@@ -273,7 +273,7 @@
             textBoxGw6.Enabled = false;
             textBoxGw6.Location = new Point(72, 52);
             textBoxGw6.Name = "textBoxGw6";
-            textBoxGw6.Size = new Size(162, 23);
+            textBoxGw6.Size = new Size(192, 23);
             textBoxGw6.TabIndex = 5;
             // 
             // textBoxDns4
@@ -281,7 +281,7 @@
             textBoxDns4.Enabled = false;
             textBoxDns4.Location = new Point(72, 82);
             textBoxDns4.Name = "textBoxDns4";
-            textBoxDns4.Size = new Size(162, 23);
+            textBoxDns4.Size = new Size(192, 23);
             textBoxDns4.TabIndex = 6;
             // 
             // textBoxDns6
@@ -289,7 +289,7 @@
             textBoxDns6.Enabled = false;
             textBoxDns6.Location = new Point(72, 112);
             textBoxDns6.Name = "textBoxDns6";
-            textBoxDns6.Size = new Size(162, 23);
+            textBoxDns6.Size = new Size(192, 23);
             textBoxDns6.TabIndex = 7;
             // 
             // groupBoxCurrent
@@ -304,7 +304,7 @@
             groupBoxCurrent.Controls.Add(textBoxCurrentDns6);
             groupBoxCurrent.Location = new Point(12, 181);
             groupBoxCurrent.Name = "groupBoxCurrent";
-            groupBoxCurrent.Size = new Size(240, 150);
+            groupBoxCurrent.Size = new Size(270, 150);
             groupBoxCurrent.TabIndex = 2;
             groupBoxCurrent.TabStop = false;
             groupBoxCurrent.Text = "Current";
@@ -322,7 +322,7 @@
             textBoxCurrentGw4.Location = new Point(72, 22);
             textBoxCurrentGw4.Name = "textBoxCurrentGw4";
             textBoxCurrentGw4.ReadOnly = true;
-            textBoxCurrentGw4.Size = new Size(160, 23);
+            textBoxCurrentGw4.Size = new Size(192, 23);
             textBoxCurrentGw4.TabIndex = 0;
             // 
             // labelCurrentGw6
@@ -338,7 +338,7 @@
             textBoxCurrentGw6.Location = new Point(72, 52);
             textBoxCurrentGw6.Name = "textBoxCurrentGw6";
             textBoxCurrentGw6.ReadOnly = true;
-            textBoxCurrentGw6.Size = new Size(160, 23);
+            textBoxCurrentGw6.Size = new Size(192, 23);
             textBoxCurrentGw6.TabIndex = 1;
             // 
             // labelCurrentDns4
@@ -354,7 +354,7 @@
             textBoxCurrentDns4.Location = new Point(72, 82);
             textBoxCurrentDns4.Name = "textBoxCurrentDns4";
             textBoxCurrentDns4.ReadOnly = true;
-            textBoxCurrentDns4.Size = new Size(160, 23);
+            textBoxCurrentDns4.Size = new Size(192, 23);
             textBoxCurrentDns4.TabIndex = 2;
             // 
             // labelCurrentDns6
@@ -370,12 +370,12 @@
             textBoxCurrentDns6.Location = new Point(72, 112);
             textBoxCurrentDns6.Name = "textBoxCurrentDns6";
             textBoxCurrentDns6.ReadOnly = true;
-            textBoxCurrentDns6.Size = new Size(160, 23);
+            textBoxCurrentDns6.Size = new Size(192, 23);
             textBoxCurrentDns6.TabIndex = 3;
             // 
             // trackBarToggle
             // 
-            trackBarToggle.Location = new Point(258, 64);
+            trackBarToggle.Location = new Point(289, 64);
             trackBarToggle.Maximum = 1;
             trackBarToggle.Name = "trackBarToggle";
             trackBarToggle.Size = new Size(56, 45);
