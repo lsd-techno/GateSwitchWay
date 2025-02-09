@@ -12,6 +12,7 @@ namespace GateSwitchWay
         private static bool isAutoStartOn = false;
         private static bool startHidden = false;
         private static bool isLoadingSettings = false;
+        private static bool isAutoAlterOn = false;
 
         private NetworkHelper.NetworkInfo currentNetworkInfo;
         private NetworkHelper.NetworkInfo alternativeNetworkInfo;
@@ -25,6 +26,10 @@ namespace GateSwitchWay
             startHidden = Settings.Default.StartHidden;
             startHiddenMenu.Checked = startHidden;
 
+            // Load AutoAlter setting
+            isAutoAlterOn = Settings.Default.AutoAlter;
+            autoAlterMenu.Checked = isAutoAlterOn;
+            
             isSwitchedOn = false;
             notifyIcon1.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
             this.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
@@ -66,6 +71,12 @@ namespace GateSwitchWay
                     NetworkHelper.SaveNativeSettings(currentNetworkInfo);
                 }
             }
+            // Switch to AlterNative mode if AutoAlter is enabled
+            if (isAutoAlterOn)
+            {
+                ToggleSwitch();
+            }
+
             NetworkHelper.UpdateTaskbarNetworkInfo(currentNetworkInfo, notifyIcon1, isSwitchedOn); // Display the current network info
             NetworkHelper.PopulateNetworkInfoTextBoxes(currentNetworkInfo, textBoxCurrentGw4, textBoxCurrentGw6, textBoxCurrentDns4, textBoxCurrentDns6);
 
@@ -357,6 +368,13 @@ namespace GateSwitchWay
             startHidden = !startHidden;
             startHiddenMenu.Checked = startHidden;
             Settings.Default.StartHidden = startHidden;
+            Settings.Default.Save();
+        }
+        private void autoAlterMenu_Click(object sender, EventArgs e)
+        {
+            isAutoAlterOn = !isAutoAlterOn;
+            autoAlterMenu.Checked = isAutoAlterOn;
+            Settings.Default.AutoAlter = isAutoAlterOn;
             Settings.Default.Save();
         }
         private void CheckBox_CheckedChanged(object sender, EventArgs e)

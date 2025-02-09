@@ -64,6 +64,7 @@
             labelCurrentDns6 = new Label();
             textBoxCurrentDns6 = new TextBox();
             trackBarToggle = new TrackBar();
+            autoAlterMenu = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             groupBoxNative.SuspendLayout();
             groupBoxAlterNative.SuspendLayout();
@@ -81,16 +82,16 @@
             // contextMenuStrip1
             // 
             contextMenuStrip1.BackColor = SystemColors.ButtonShadow;
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { mainToolStripMenuItem, startHiddenMenu, autoStartMenu, toolStripSeparator1, exitToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { mainToolStripMenuItem, startHiddenMenu, autoAlterMenu, autoStartMenu, toolStripSeparator1, exitToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(138, 98);
+            contextMenuStrip1.Size = new Size(181, 142);
             // 
             // mainToolStripMenuItem
             // 
             mainToolStripMenuItem.Checked = true;
             mainToolStripMenuItem.CheckState = CheckState.Checked;
             mainToolStripMenuItem.Name = "mainToolStripMenuItem";
-            mainToolStripMenuItem.Size = new Size(137, 22);
+            mainToolStripMenuItem.Size = new Size(180, 22);
             mainToolStripMenuItem.Text = "Main";
             mainToolStripMenuItem.Click += mainToolStripMenuItem_Click;
             // 
@@ -99,28 +100,37 @@
             startHiddenMenu.Checked = true;
             startHiddenMenu.CheckState = CheckState.Checked;
             startHiddenMenu.Name = "startHiddenMenu";
-            startHiddenMenu.Size = new Size(137, 22);
+            startHiddenMenu.Size = new Size(180, 22);
             startHiddenMenu.Text = "StartHidden";
             startHiddenMenu.Click += startHiddenMenu_Click;
+            // 
+            // autoAlterMenu
+            // 
+            autoAlterMenu.Checked = true;
+            autoAlterMenu.CheckState = CheckState.Checked;
+            autoAlterMenu.Name = "autoAlterMenu";
+            autoAlterMenu.Size = new Size(180, 22);
+            autoAlterMenu.Text = "AutoAlter";
+            autoAlterMenu.Click += autoAlterMenu_Click;
             // 
             // autoStartMenu
             // 
             autoStartMenu.Checked = true;
             autoStartMenu.CheckState = CheckState.Checked;
             autoStartMenu.Name = "autoStartMenu";
-            autoStartMenu.Size = new Size(137, 22);
+            autoStartMenu.Size = new Size(180, 22);
             autoStartMenu.Text = "AutoStart";
             autoStartMenu.Click += autoStartMenu_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(134, 6);
+            toolStripSeparator1.Size = new Size(177, 6);
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(137, 22);
+            exitToolStripMenuItem.Size = new Size(180, 22);
             exitToolStripMenuItem.Text = "exit";
             exitToolStripMenuItem.TextImageRelation = TextImageRelation.TextBeforeImage;
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
@@ -418,6 +428,7 @@
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripMenuItem autoStartMenu;
         private ToolStripMenuItem startHiddenMenu;
+        private ToolStripMenuItem autoAlterMenu;
         private GroupBox groupBoxNative;
         private GroupBox groupBoxAlterNative;
         private GroupBox groupBoxCurrent;

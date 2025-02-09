@@ -226,5 +226,17 @@ namespace GateSwitchWay {
                 this["NativeDns6"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoAlter {
+            get {
+                return ((bool)(this["AutoAlter"]));
+            }
+            set {
+                this["AutoAlter"] = value;
+            }
+        }
     }
 }
