@@ -10,9 +10,10 @@ namespace GateSwitchWay
 {
     internal class AppAutoStart
     {
-        // Retrie assembly name to use as the task name
+        // Retrieve assembly name to use as the task name
         public static readonly string taskName = Assembly.GetExecutingAssembly().GetName().Name ?? "GateSwitchWay";
-        private static readonly string exePath = Assembly.GetExecutingAssembly().Location.Replace("\\", "\\\\");
+        // override file name to use .exe extension
+        private static readonly string exePath = Path.ChangeExtension(Assembly.GetExecutingAssembly().Location, ".exe").Replace("\\", "\\\\");
 
         public static bool SetAutoStart(bool enable)
         {
