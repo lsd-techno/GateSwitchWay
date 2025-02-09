@@ -130,5 +130,101 @@ namespace GateSwitchWay {
                 this["AlterNativeDns6"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NativeGw4Enabled {
+            get {
+                return ((bool)(this["NativeGw4Enabled"]));
+            }
+            set {
+                this["NativeGw4Enabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("N/A")]
+        public string NativeGw4 {
+            get {
+                return ((string)(this["NativeGw4"]));
+            }
+            set {
+                this["NativeGw4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NativeGw6Enabled {
+            get {
+                return ((bool)(this["NativeGw6Enabled"]));
+            }
+            set {
+                this["NativeGw6Enabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("N/A")]
+        public string NativeGw6 {
+            get {
+                return ((string)(this["NativeGw6"]));
+            }
+            set {
+                this["NativeGw6"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NativeDns4Enabled {
+            get {
+                return ((bool)(this["NativeDns4Enabled"]));
+            }
+            set {
+                this["NativeDns4Enabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("N/A")]
+        public string NativeDns4 {
+            get {
+                return ((string)(this["NativeDns4"]));
+            }
+            set {
+                this["NativeDns4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NativeDns6Enabled {
+            get {
+                return ((bool)(this["NativeDns6Enabled"]));
+            }
+            set {
+                this["NativeDns6Enabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("N/A")]
+        public string NativeDns6 {
+            get {
+                return ((string)(this["NativeDns6"]));
+            }
+            set {
+                this["NativeDns6"] = value;
+            }
+        }
     }
 }

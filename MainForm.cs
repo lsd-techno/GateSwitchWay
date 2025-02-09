@@ -30,10 +30,45 @@ namespace GateSwitchWay
             this.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
 
             currentNetworkInfo = NetworkHelper.GetCurrentNetworkInfo(); // Call the method to update the network info on startup
-            NetworkHelper.UpdateTaskbarNetworkInfo(currentNetworkInfo, notifyIcon1, isSwitchedOn); // Display the current network info
-            NetworkHelper.PopulateNetworkInfoTextBoxes(currentNetworkInfo, textBoxCurrentGw4, textBoxCurrentGw6, textBoxCurrentDns4, textBoxCurrentDns6);
+
             isLoadingSettings = true;
             NetworkHelper.LoadAlterNativeSettings(textBoxGw4, textBoxGw6, textBoxDns4, textBoxDns6, checkBoxGw4, checkBoxGw6, checkBoxDns4, checkBoxDns6);
+
+            // Check if there are any saved AlterNative settings
+            alternativeNetworkInfo = NetworkHelper.GetAlterNativeSettings();
+            if ((alternativeNetworkInfo.Gateway4 == "N/A") && (alternativeNetworkInfo.Gateway6 == "N/A") && (alternativeNetworkInfo.Dns4 == "N/A") && (alternativeNetworkInfo.Dns6 == "N/A"))
+            {
+                // No saved alternative settings, save current settings as native settings
+                NetworkHelper.SaveNativeSettings(currentNetworkInfo);
+            }
+            else
+            {
+                // Compare current settings with saved alternative settings
+                if (NetworkHelper.AreSettingsEqual(currentNetworkInfo, alternativeNetworkInfo))
+                {
+                    // Current settings are equal to saved alternative settings, restore native settings from storage
+                    currentNetworkInfo = NetworkHelper.LoadNativeSettings();
+                    //check if restored native settings are valid
+                    if (currentNetworkInfo.Gateway4 == "N/A" && currentNetworkInfo.Gateway6 == "N/A" && currentNetworkInfo.Dns4 == "N/A" && currentNetworkInfo.Dns6 == "N/A")
+                    {
+                        // restored settings are invalid, check if need to do anything else here
+                    }
+                    else
+                    {
+                        // restore native settings from saved settings from previous run
+                        // Update the network info to reflect the restored native settings
+                        NetworkHelper.TemporaryModifyNetworkInfo(currentNetworkInfo);
+                    }
+                }
+                else
+                {
+                    // Current settings are different from saved alternative settings, save current settings as new native settings
+                    NetworkHelper.SaveNativeSettings(currentNetworkInfo);
+                }
+            }
+            NetworkHelper.UpdateTaskbarNetworkInfo(currentNetworkInfo, notifyIcon1, isSwitchedOn); // Display the current network info
+            NetworkHelper.PopulateNetworkInfoTextBoxes(currentNetworkInfo, textBoxCurrentGw4, textBoxCurrentGw6, textBoxCurrentDns4, textBoxCurrentDns6);
+
             isLoadingSettings = false;
             TrackBar_Set(isSwitchedOn);
             NetworkHelper.PopulateNetworkInfoTextBoxes(currentNetworkInfo, textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6);

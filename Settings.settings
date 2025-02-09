@@ -29,5 +29,29 @@
     <Setting Name="AlterNativeDns6" Type="System.String" Scope="User">
       <Value Profile="(Default)">N/A</Value>
     </Setting>
+    <Setting Name="NativeGw4Enabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="NativeGw4" Type="System.String" Scope="User">
+      <Value Profile="(Default)">N/A</Value>
+    </Setting>
+    <Setting Name="NativeGw6Enabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="NativeGw6" Type="System.String" Scope="User">
+      <Value Profile="(Default)">N/A</Value>
+    </Setting>
+    <Setting Name="NativeDns4Enabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="NativeDns4" Type="System.String" Scope="User">
+      <Value Profile="(Default)">N/A</Value>
+    </Setting>
+    <Setting Name="NativeDns6Enabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="NativeDns6" Type="System.String" Scope="User">
+      <Value Profile="(Default)">N/A</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

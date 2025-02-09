@@ -172,5 +172,73 @@ namespace GateSwitchWay
                 }
             }
         }
+        public static void SaveNativeSettings(NetworkInfo networkInfo)
+        {
+            Settings.Default.NativeGw4 = networkInfo.Gateway4;
+            Settings.Default.NativeGw6 = networkInfo.Gateway6;
+            Settings.Default.NativeDns4 = networkInfo.Dns4;
+            Settings.Default.NativeDns6 = networkInfo.Dns6;
+
+            Settings.Default.NativeGw4Enabled = networkInfo.Gateway4_enable;
+            Settings.Default.NativeGw6Enabled = networkInfo.Gateway6_enable;
+            Settings.Default.NativeDns4Enabled = networkInfo.Dns4_enable;
+            Settings.Default.NativeDns6Enabled = networkInfo.Dns6_enable;
+
+            Settings.Default.Save();
+        }
+
+        public static NetworkInfo GetAlterNativeSettings()
+        {
+            NetworkInfo alternativeNetworkInfo = new NetworkInfo
+            {
+                Gateway4 = Settings.Default.AlterNativeGw4,
+                Gateway6 = Settings.Default.AlterNativeGw6,
+                Dns4 = Settings.Default.AlterNativeDns4,
+                Dns6 = Settings.Default.AlterNativeDns6,
+                Gateway4_enable = Settings.Default.AlterNativeGw4Enabled,
+                Gateway6_enable = Settings.Default.AlterNativeGw6Enabled,
+                Dns4_enable = Settings.Default.AlterNativeDns4Enabled,
+                Dns6_enable = Settings.Default.AlterNativeDns6Enabled
+            };
+
+            return alternativeNetworkInfo;
+        }
+
+        public static bool AreSettingsEqual(NetworkInfo networkInfo1, NetworkInfo networkInfo2)
+        {
+            // Check if none of the fields are enabled
+            if (!networkInfo2.Gateway4_enable && !networkInfo2.Gateway6_enable &&
+                !networkInfo2.Dns4_enable && !networkInfo2.Dns6_enable)
+            {
+                return false;
+            }
+
+            if (networkInfo2.Gateway4_enable && networkInfo1.Gateway4 != networkInfo2.Gateway4)
+                return false;
+            if (networkInfo2.Gateway6_enable && networkInfo1.Gateway6 != networkInfo2.Gateway6)
+                return false;
+            if (networkInfo2.Dns4_enable && networkInfo1.Dns4 != networkInfo2.Dns4)
+                return false;
+            if (networkInfo2.Dns6_enable && networkInfo1.Dns6 != networkInfo2.Dns6)
+                return false;
+
+            return true;
+        }
+        public static NetworkInfo LoadNativeSettings()
+        {
+            NetworkInfo nativeNetworkInfo = new NetworkInfo
+            {
+                Gateway4 = Settings.Default.NativeGw4,
+                Gateway6 = Settings.Default.NativeGw6,
+                Dns4 = Settings.Default.NativeDns4,
+                Dns6 = Settings.Default.NativeDns6,
+                Gateway4_enable = Settings.Default.NativeGw4Enabled,
+                Gateway6_enable = Settings.Default.NativeGw6Enabled,
+                Dns4_enable = Settings.Default.NativeDns4Enabled,
+                Dns6_enable = Settings.Default.NativeDns6Enabled
+            };
+
+            return nativeNetworkInfo;
+        }
     }
 }
