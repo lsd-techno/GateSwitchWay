@@ -71,6 +71,9 @@ namespace GateSwitchWay
                     NetworkHelper.SaveNativeSettings(currentNetworkInfo);
                 }
             }
+            // Update the native network info box to be consistent with native settings
+            NetworkHelper.PopulateNetworkInfoTextBoxes(currentNetworkInfo, textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6);
+
             // Switch to AlterNative mode if AutoAlter is enabled
             if (isAutoAlterOn)
             {
@@ -82,7 +85,6 @@ namespace GateSwitchWay
 
             isLoadingSettings = false;
             TrackBar_Set(isSwitchedOn);
-            NetworkHelper.PopulateNetworkInfoTextBoxes(currentNetworkInfo, textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6);
 
             clickTimer.Interval = SystemInformation.DoubleClickTime - 1; // Just under the double-click speed
             clickTimer.Tick += (s, e) =>
