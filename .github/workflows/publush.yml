@@ -1,0 +1,35 @@
+name: .NET 8.0 Build, Publish, and Artifact Upload
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore GateSwitchWay.sln
+
+      - name: Build Solution
+        run: dotnet build GateSwitchWay.sln --configuration Release --no-restore
+
+      - name: Publish Application
+        run: dotnet publish GateSwitchWay.sln --configuration Release --self-contained true -r win-x64 --output publish
+
+      - name: Upload Published Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: published-artifacts
+          path: publish/**
