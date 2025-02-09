@@ -248,6 +248,10 @@ namespace GateSwitchWay
             // Implement the switch on/off logic here
             isSwitchedOn = !isSwitchedOn;
 
+            // set icon to `gw64_1_Jnv_icon` as not defined yet mode
+            notifyIcon1.Icon = Res.gw64_1_Jnv_icon;
+            this.Icon = Res.gw64_1_Jnv_icon;
+
             if (isSwitchedOn)
             {
                 // Switched on
