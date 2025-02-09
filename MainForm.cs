@@ -248,6 +248,17 @@ namespace GateSwitchWay
             // Implement the switch on/off logic here
             isSwitchedOn = !isSwitchedOn;
 
+            if (isSwitchedOn)
+            {
+                // Switched on
+                NetworkHelper.TemporaryModifyNetworkInfo(alternativeNetworkInfo);
+            }
+            else
+            {
+                // Switched off
+                currentNetworkInfo = NetworkHelper.LoadNativeSettings();
+                NetworkHelper.TemporaryModifyNetworkInfo(currentNetworkInfo);
+            }
             // Update the icon based on the new state
             notifyIcon1.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
             this.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
