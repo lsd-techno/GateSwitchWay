@@ -251,6 +251,7 @@ namespace GateSwitchWay
             if (isSwitchedOn)
             {
                 // Switched on
+                UpdateAlternativeNetworkInfo();
                 NetworkHelper.TemporaryModifyNetworkInfo(alternativeNetworkInfo);
             }
             else
@@ -264,8 +265,11 @@ namespace GateSwitchWay
             this.Icon = isSwitchedOn ? Res.gw64_yg_TEA_icon : Res.gw64_g_vzI_icon;
 
             this.Text = isSwitchedOn ? "AlterNative GateWay" : "Native GateWay";
-
-            // Update network info to be consistent with current mode
+            // Update the network info to be consistent with current mode
+            currentNetworkInfo = NetworkHelper.GetCurrentNetworkInfo();
+            // update current network info textboxes
+            NetworkHelper.PopulateNetworkInfoTextBoxes(currentNetworkInfo, textBoxCurrentGw4, textBoxCurrentGw6, textBoxCurrentDns4, textBoxCurrentDns6);
+            // Update taskbar popup network info to be consistent with current mode
             NetworkHelper.UpdateTaskbarNetworkInfo(currentNetworkInfo, notifyIcon1, isSwitchedOn);
             // Update the display of the current mode
             DisplayCurrentMode(isSwitchedOn);
@@ -423,6 +427,17 @@ namespace GateSwitchWay
                 groupBoxAlterNative.Font = new Font(groupBoxAlterNative.Font, FontStyle.Regular);
                 groupBoxNative.Font = new Font(groupBoxNative.Font, FontStyle.Bold);
             }
+        }
+        private void UpdateAlternativeNetworkInfo()
+        {
+            alternativeNetworkInfo.Gateway4_enable = checkBoxGw4.Checked;
+            alternativeNetworkInfo.Gateway4 = textBoxGw4.Text;
+            alternativeNetworkInfo.Gateway6_enable = checkBoxGw6.Checked;
+            alternativeNetworkInfo.Gateway6 = textBoxGw6.Text;
+            alternativeNetworkInfo.Dns4_enable = checkBoxDns4.Checked;
+            alternativeNetworkInfo.Dns4 = textBoxDns4.Text;
+            alternativeNetworkInfo.Dns6_enable = checkBoxDns6.Checked;
+            alternativeNetworkInfo.Dns6 = textBoxDns6.Text;
         }
     }
 }
