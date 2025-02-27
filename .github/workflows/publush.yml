@@ -34,7 +34,7 @@ jobs:
       - name: Get version and build executable
         run: |
           $version = $(git describe --tags --abbrev=0) -or "0.0.0"
-          dotnet-warp --input publish --output GateSwitchWay-$version.exe
+          dotnet-warp publish --output GateSwitchWay-$version.exe
         shell: pwsh
         env:
           DOTNET_ROOT: C:\Program Files\dotnet
