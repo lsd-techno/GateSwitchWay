@@ -33,7 +33,8 @@ jobs:
 
       - name: Get version and build executable
         run: |
-          $version = $(git describe --tags --abbrev=0) || $version = "0.0.0"
+          $version = $(git describe --tags --abbrev=0)
+          if (-not $version) { $version = "0.0.0" }
           dotnet-warp publish --output GateSwitchWay-$version.exe
 
       - name: Upload Published Artifacts
