@@ -31,11 +31,11 @@ jobs:
       - name: Install dotnet-warp
         run: dotnet tool install --global dotnet-warp
 
-      - name: Create Single Executable
+      - name: Get version and build executable
         run: |
-          version=$(git describe --tags --abbrev=0)
+          $version = $(git describe --tags --abbrev=0)
           dotnet-warp --input publish --output GateSwitchWay-$version.exe
-
+        
       - name: Upload Published Artifacts
         uses: actions/upload-artifact@v4
         with:
