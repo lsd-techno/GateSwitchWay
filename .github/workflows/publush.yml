@@ -3,8 +3,8 @@ name: .NET 8.0 Build, Publish, and Artifact Upload
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -26,10 +26,18 @@ jobs:
         run: dotnet build GateSwitchWay.sln --configuration Release --no-restore
 
       - name: Publish Application
-        run: dotnet publish GateSwitchWay.sln --configuration Release --self-contained true -r win-x64 --output publish
+        run: dotnet publish GateSwitchWay.sln --configuration Release -r win-x64 --output publish
+
+      - name: Install dotnet-warp
+        run: dotnet tool install --global dotnet-warp
+
+      - name: Create Single Executable
+        run: |
+          version=$(git describe --tags --abbrev=0)
+          dotnet-warp --input publish --output GateSwitchWay-$version.exe
 
       - name: Upload Published Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: published-artifacts
-          path: publish/**
+          path: GateSwitchWay-*.exe
