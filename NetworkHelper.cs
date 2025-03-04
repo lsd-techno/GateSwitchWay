@@ -147,6 +147,67 @@ namespace GateSwitchWay
 
         private static void ExecutePowerShellCommand(string command)
         {
+            // If adding a new route, check if it exists first and use different approach
+            if (command.StartsWith("New-NetRoute"))
+            {
+                // Extract destination prefix and next hop from the command
+                string destinationPrefix = ExtractParameter(command, "-DestinationPrefix");
+                string nextHop = ExtractParameter(command, "-NextHop");
+
+                if (!string.IsNullOrEmpty(destinationPrefix) && !string.IsNullOrEmpty(nextHop))
+                {
+                    // Create a modified command that checks if the route exists first
+                    string modifiedCommand = $@"
+                        $route = Get-NetRoute -DestinationPrefix '{destinationPrefix}' -ErrorAction SilentlyContinue
+                        if ($route) {{
+                            # Route exists, remove it first
+                            Remove-NetRoute -DestinationPrefix '{destinationPrefix}' -Confirm:$False -ErrorAction SilentlyContinue
+                        }}
+                        # Now add the new route using the original parameters
+                        {command}
+                    ";
+
+                    ExecuteRawPowerShellCommand(modifiedCommand);
+                    return;
+                }
+            }
+
+            // For other commands, execute normally
+            ExecuteRawPowerShellCommand(command);
+        }
+
+        private static string ExtractParameter(string command, string paramName)
+        {
+            // Simple parameter extraction
+            int startIndex = command.IndexOf(paramName) + paramName.Length;
+            if (startIndex > paramName.Length)
+            {
+                startIndex = command.IndexOf("\"", startIndex);
+                if (startIndex > 0)
+                {
+                    int endIndex = command.IndexOf("\"", startIndex + 1);
+                    if (endIndex > startIndex)
+                    {
+                        return command.Substring(startIndex + 1, endIndex - startIndex - 1);
+                    }
+                }
+                else
+                {
+                    // Try without quotes
+                    startIndex = command.IndexOf(" ", command.IndexOf(paramName) + paramName.Length) + 1;
+                    if (startIndex > 0)
+                    {
+                        int endIndex = command.IndexOf(" ", startIndex);
+                        if (endIndex < 0) endIndex = command.Length;
+                        return command.Substring(startIndex, endIndex - startIndex);
+                    }
+                }
+            }
+            return string.Empty;
+        }
+
+        private static void ExecuteRawPowerShellCommand(string command)
+        {
             ProcessStartInfo processStartInfo = new ProcessStartInfo
             {
                 FileName = "powershell.exe",
@@ -166,8 +227,11 @@ namespace GateSwitchWay
                 string output = process.StandardOutput.ReadToEnd();
                 string error = process.StandardError.ReadToEnd();
 
-                if (!string.IsNullOrEmpty(error))
+                if (!string.IsNullOrEmpty(error) &&
+                    !error.Contains("Instance MSFT_NetRoute already exists") &&
+                    !error.Contains("ObjectNotFound")) // Ignore errors when removing non-existent routes
                 {
+                    Debug.WriteLine($"PowerShell error: {error}");
                     throw new InvalidOperationException($"Error executing PowerShell command: {error}");
                 }
             }
