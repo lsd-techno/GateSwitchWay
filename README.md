@@ -32,8 +32,13 @@ The application allows users to configure the following settings:
 
 ## Installation
 
-1. Download the latest release from the [releases page](#).
-2. Run the installer and follow the on-screen instructions.
+### option 1:
+1. ~~Download the latest release from the [releases page](#).~~
+2. ~~Run the installer and follow the on-screen instructions.~~
+
+### option 2:
+1. Download latest version from [`Actions`](https://github.com/lsd-techno/GateSwitchWay/actions) page, `published-artifacts` from latest successful run
+2. Unzip, start, use...
 
 ## License
 
