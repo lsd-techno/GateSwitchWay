@@ -21,7 +21,9 @@ namespace GateSwitchWay
             {
                 FileName = "schtasks.exe",
                 CreateNoWindow = true,
-                UseShellExecute = false
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
             };
 
             startInfo.Arguments = enable
@@ -32,30 +34,138 @@ namespace GateSwitchWay
             {
                 using (Process process = Process.Start(startInfo))
                 {
+                    string output = process.StandardOutput.ReadToEnd();
+                    string error = process.StandardError.ReadToEnd();
                     process.WaitForExit();
+
                     if (process.ExitCode != 0)
                     {
                         Console.WriteLine($"Command exited with code {process.ExitCode}");
+                        Console.WriteLine($"Error: {error}");
                         return false;
                     }
                     else if (enable)
                     {
-                        // Remove the 3-day execution time limit using PowerShell
-                        var psInfo = new ProcessStartInfo
+                        // Create an XML file with the updated task settings to properly remove the time limit
+                        string tempXmlPath = Path.Combine(Path.GetTempPath(), $"{taskName}_task.xml");
+                        var psExport = new ProcessStartInfo
                         {
                             FileName = "powershell.exe",
-                            Arguments = $"-NoProfile -WindowStyle Hidden -Command \"Get-ScheduledTask -TaskName '{taskName}' | Set-ScheduledTask -Settings (New-ScheduledTaskSettingsSet -ExecutionTimeLimit 0)\"",
+                            Arguments = $"-NoProfile -Command \"Export-ScheduledTask -TaskName '{taskName}' | Out-File -FilePath '{tempXmlPath}'\"",
                             CreateNoWindow = true,
                             UseShellExecute = false
                         };
-                        using (var psProcess = Process.Start(psInfo))
+
+                        using (var psProcess = Process.Start(psExport))
                         {
                             psProcess.WaitForExit();
-                            if (psProcess.ExitCode != 0)
+                        }
+
+                        if (File.Exists(tempXmlPath))
+                        {
+                            try
                             {
-                                Console.WriteLine($"PowerShell command exited with code {psProcess.ExitCode}");
+                                var xmlDoc = new System.Xml.XmlDocument();
+                                xmlDoc.Load(tempXmlPath);
+
+                                var nsManager = new System.Xml.XmlNamespaceManager(xmlDoc.NameTable);
+                                nsManager.AddNamespace("ns", "http://schemas.microsoft.com/windows/2004/02/mit/task");
+
+                                // Find the Settings node
+                                var settingsNode = xmlDoc.SelectSingleNode("//ns:Settings", nsManager);
+                                if (settingsNode != null)
+                                {
+                                    // Update or create ExecutionTimeLimit
+                                    var executionTimeLimit = xmlDoc.SelectSingleNode("//ns:ExecutionTimeLimit", nsManager);
+                                    if (executionTimeLimit != null)
+                                    {
+                                        executionTimeLimit.InnerText = "PT0S";
+                                    }
+                                    else
+                                    {
+                                        var newElement = xmlDoc.CreateElement("ExecutionTimeLimit", nsManager.LookupNamespace("ns"));
+                                        newElement.InnerText = "PT0S";
+                                        settingsNode.AppendChild(newElement);
+                                    }
+
+                                    // Update IdleSettings
+                                    var idleSettings = xmlDoc.SelectSingleNode("//ns:IdleSettings", nsManager);
+                                    if (idleSettings != null)
+                                    {
+                                        // Remove Duration and WaitTimeout if they exist
+                                        var duration = idleSettings.SelectSingleNode("ns:Duration", nsManager);
+                                        if (duration != null)
+                                        {
+                                            idleSettings.RemoveChild(duration);
+                                        }
+
+                                        var waitTimeout = idleSettings.SelectSingleNode("ns:WaitTimeout", nsManager);
+                                        if (waitTimeout != null)
+                                        {
+                                            idleSettings.RemoveChild(waitTimeout);
+                                        }
+                                    }
+
+                                    // Update other settings
+                                    var disallowStartIfOnBatteries = xmlDoc.SelectSingleNode("//ns:DisallowStartIfOnBatteries", nsManager);
+                                    if (disallowStartIfOnBatteries != null)
+                                    {
+                                        disallowStartIfOnBatteries.InnerText = "false";
+                                    }
+
+                                    var stopIfGoingOnBatteries = xmlDoc.SelectSingleNode("//ns:StopIfGoingOnBatteries", nsManager);
+                                    if (stopIfGoingOnBatteries != null)
+                                    {
+                                        stopIfGoingOnBatteries.InnerText = "false";
+                                    }
+
+                                    var allowHardTerminate = xmlDoc.SelectSingleNode("//ns:AllowHardTerminate", nsManager);
+                                    if (allowHardTerminate != null)
+                                    {
+                                        allowHardTerminate.InnerText = "true";
+                                    }
+                                }
+
+                                xmlDoc.Save(tempXmlPath);
+
+                                // Import the modified XML file
+                                var psImport = new ProcessStartInfo
+                                {
+                                    FileName = "schtasks.exe",
+                                    Arguments = $"/Create /F /TN \"{taskName}\" /XML \"{tempXmlPath}\"",
+                                    CreateNoWindow = true,
+                                    UseShellExecute = false,
+                                    RedirectStandardOutput = true,
+                                    RedirectStandardError = true
+                                };
+
+                                using (var importProcess = Process.Start(psImport))
+                                {
+                                    string importOutput = importProcess.StandardOutput.ReadToEnd();
+                                    string importError = importProcess.StandardError.ReadToEnd();
+                                    importProcess.WaitForExit();
+
+                                    if (importProcess.ExitCode != 0)
+                                    {
+                                        Console.WriteLine($"Task import error: {importError}");
+                                        return false;
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error modifying task XML: {ex.Message}");
                                 return false;
                             }
+                            finally
+                            {
+                                try { File.Delete(tempXmlPath); } catch { /* Ignore cleanup errors */ }
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Failed to export task XML");
+                            return false;
                         }
                     }
                     return true;
