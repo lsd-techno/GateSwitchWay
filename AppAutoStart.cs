@@ -24,8 +24,9 @@ namespace GateSwitchWay
                 UseShellExecute = false
             };
 
-            // create or delete task based on `enable` parameter
-            startInfo.Arguments = enable ? $"/Create /F /RL HIGHEST /SC ONLOGON /TN \"{taskName}\" /TR \"'{exePath}'\"" : $"/Delete /F /TN \"{taskName}\"";
+            startInfo.Arguments = enable
+                ? $"/Create /F /RL HIGHEST /SC ONLOGON /TN \"{taskName}\" /TR \"'{exePath}'\""
+                : $"/Delete /F /TN \"{taskName}\"";
 
             try
             {
@@ -37,11 +38,27 @@ namespace GateSwitchWay
                         Console.WriteLine($"Command exited with code {process.ExitCode}");
                         return false;
                     }
-                    else
+                    else if (enable)
                     {
-                        // success return
-                        return true;
+                        // Remove the 3-day execution time limit using PowerShell
+                        var psInfo = new ProcessStartInfo
+                        {
+                            FileName = "powershell.exe",
+                            Arguments = $"-NoProfile -WindowStyle Hidden -Command \"Get-ScheduledTask -TaskName '{taskName}' | Set-ScheduledTask -Settings (New-ScheduledTaskSettingsSet -ExecutionTimeLimit 0)\"",
+                            CreateNoWindow = true,
+                            UseShellExecute = false
+                        };
+                        using (var psProcess = Process.Start(psInfo))
+                        {
+                            psProcess.WaitForExit();
+                            if (psProcess.ExitCode != 0)
+                            {
+                                Console.WriteLine($"PowerShell command exited with code {psProcess.ExitCode}");
+                                return false;
+                            }
+                        }
                     }
+                    return true;
                 }
             }
             catch (Exception ex)
