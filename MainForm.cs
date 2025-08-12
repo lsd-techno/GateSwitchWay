@@ -44,7 +44,7 @@ namespace GateSwitchWay
             NetworkHelper.LoadAlterNativeSettings(textBoxGw4, textBoxGw6, textBoxDns4, textBoxDns6, checkBoxGw4, checkBoxGw6, checkBoxDns4, checkBoxDns6);
 
             // Load native settings to UI
-            NetworkHelper.LoadNativeSettingsToUI(textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6);
+            NetworkHelper.LoadNativeSettingsToUI(textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6, checkBoxNativeGw4, checkBoxNativeGw6, checkBoxNativeDns4, checkBoxNativeDns6);
 
             // Initialize auto-refresh settings
             checkBoxAutoRefresh.Checked = Settings.Default.AutoRefreshEnabled;
@@ -177,7 +177,7 @@ namespace GateSwitchWay
         {
             try
             {
-                NetworkHelper.SaveNativeSettingsFromUI(textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6);
+                NetworkHelper.SaveNativeSettingsFromUI(textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6, checkBoxNativeGw4, checkBoxNativeGw6, checkBoxNativeDns4, checkBoxNativeDns6);
                 MessageBox.Show("Native network settings saved successfully!", "Settings Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
@@ -192,6 +192,13 @@ namespace GateSwitchWay
             {
                 var currentInfo = NetworkHelper.GetCurrentNetworkInfo();
                 NetworkHelper.PopulateNetworkInfoTextBoxes(currentInfo, textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6);
+                
+                // Enable checkboxes for valid network settings
+                checkBoxNativeGw4.Checked = currentInfo.Gateway4_enable;
+                checkBoxNativeGw6.Checked = currentInfo.Gateway6_enable;
+                checkBoxNativeDns4.Checked = currentInfo.Dns4_enable;
+                checkBoxNativeDns6.Checked = currentInfo.Dns6_enable;
+                
                 MessageBox.Show("Current network settings loaded into Native settings!", "Settings Loaded", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
@@ -205,6 +212,8 @@ namespace GateSwitchWay
             base.OnShown(e);
             // Update AlterNative settings display
             AlterCheckBoxes_ReEnable();
+            // Update Native settings display
+            NativeCheckBoxes_ReEnable();
             DisplayCurrentMode(isSwitchedOn);
             TrackBar_Set(isSwitchedOn);
             
@@ -473,6 +482,7 @@ namespace GateSwitchWay
             if (checkBox != null)
             {
                 bool needSave = false;
+                bool needNativeSave = false;
                 switch (checkBox.Name)
                 {
                     case "checkBoxGw4":
@@ -482,6 +492,15 @@ namespace GateSwitchWay
                         {
                             AlterCheckBoxes_ReEnable();
                             needSave = true;
+                            break;
+                        }
+                    case "checkBoxNativeGw4":
+                    case "checkBoxNativeGw6":
+                    case "checkBoxNativeDns4":
+                    case "checkBoxNativeDns6":
+                        {
+                            NativeCheckBoxes_ReEnable();
+                            needNativeSave = true;
                             break;
                         }
                     case "checkBoxAutoRefresh":
@@ -508,6 +527,10 @@ namespace GateSwitchWay
                     if (needSave)
                     {
                         NetworkHelper.SaveAlterNativeSettings(textBoxGw4, textBoxGw6, textBoxDns4, textBoxDns6, checkBoxGw4, checkBoxGw6, checkBoxDns4, checkBoxDns6);
+                    }
+                    if (needNativeSave)
+                    {
+                        NetworkHelper.SaveNativeSettingsFromUI(textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6, checkBoxNativeGw4, checkBoxNativeGw6, checkBoxNativeDns4, checkBoxNativeDns6);
                     }
                 }
             }
@@ -544,6 +567,13 @@ namespace GateSwitchWay
             textBoxGw6.Enabled = checkBoxGw6.Checked;
             textBoxDns4.Enabled = checkBoxDns4.Checked;
             textBoxDns6.Enabled = checkBoxDns6.Checked;
+        }
+        private void NativeCheckBoxes_ReEnable()
+        {
+            textBoxNativeGw4.Enabled = checkBoxNativeGw4.Checked;
+            textBoxNativeGw6.Enabled = checkBoxNativeGw6.Checked;
+            textBoxNativeDns4.Enabled = checkBoxNativeDns4.Checked;
+            textBoxNativeDns6.Enabled = checkBoxNativeDns6.Checked;
         }
         private void TrackBarToggle_ValueChanged(object sender, EventArgs e)
         {

@@ -251,27 +251,32 @@ namespace GateSwitchWay
             Settings.Default.Save();
         }
 
-        public static void SaveNativeSettingsFromUI(TextBox textBoxGw4, TextBox textBoxGw6, TextBox textBoxDns4, TextBox textBoxDns6)
+        public static void SaveNativeSettingsFromUI(TextBox textBoxGw4, TextBox textBoxGw6, TextBox textBoxDns4, TextBox textBoxDns6, CheckBox checkBoxGw4, CheckBox checkBoxGw6, CheckBox checkBoxDns4, CheckBox checkBoxDns6)
         {
             Settings.Default.NativeGw4 = textBoxGw4.Text;
             Settings.Default.NativeGw6 = textBoxGw6.Text;
             Settings.Default.NativeDns4 = textBoxDns4.Text;
             Settings.Default.NativeDns6 = textBoxDns6.Text;
 
-            Settings.Default.NativeGw4Enabled = !string.IsNullOrEmpty(textBoxGw4.Text) && textBoxGw4.Text != "N/A";
-            Settings.Default.NativeGw6Enabled = !string.IsNullOrEmpty(textBoxGw6.Text) && textBoxGw6.Text != "N/A";
-            Settings.Default.NativeDns4Enabled = !string.IsNullOrEmpty(textBoxDns4.Text) && textBoxDns4.Text != "N/A";
-            Settings.Default.NativeDns6Enabled = !string.IsNullOrEmpty(textBoxDns6.Text) && textBoxDns6.Text != "N/A";
+            Settings.Default.NativeGw4Enabled = checkBoxGw4.Checked;
+            Settings.Default.NativeGw6Enabled = checkBoxGw6.Checked;
+            Settings.Default.NativeDns4Enabled = checkBoxDns4.Checked;
+            Settings.Default.NativeDns6Enabled = checkBoxDns6.Checked;
 
             Settings.Default.Save();
         }
 
-        public static void LoadNativeSettingsToUI(TextBox textBoxGw4, TextBox textBoxGw6, TextBox textBoxDns4, TextBox textBoxDns6)
+        public static void LoadNativeSettingsToUI(TextBox textBoxGw4, TextBox textBoxGw6, TextBox textBoxDns4, TextBox textBoxDns6, CheckBox checkBoxGw4, CheckBox checkBoxGw6, CheckBox checkBoxDns4, CheckBox checkBoxDns6)
         {
             textBoxGw4.Text = Settings.Default.NativeGw4;
             textBoxGw6.Text = Settings.Default.NativeGw6;
             textBoxDns4.Text = Settings.Default.NativeDns4;
             textBoxDns6.Text = Settings.Default.NativeDns6;
+
+            checkBoxGw4.Checked = Settings.Default.NativeGw4Enabled;
+            checkBoxGw6.Checked = Settings.Default.NativeGw6Enabled;
+            checkBoxDns4.Checked = Settings.Default.NativeDns4Enabled;
+            checkBoxDns6.Checked = Settings.Default.NativeDns6Enabled;
         }
 
         public static NetworkInfo GetAlterNativeSettings()

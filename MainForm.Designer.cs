@@ -39,13 +39,13 @@
             toolStripSeparator1 = new ToolStripSeparator();
             exitToolStripMenuItem = new ToolStripMenuItem();
             groupBoxNative = new GroupBox();
-            labelNativeGw4 = new Label();
+            checkBoxNativeGw4 = new CheckBox();
             textBoxNativeGw4 = new TextBox();
-            labelNativeGw6 = new Label();
+            checkBoxNativeGw6 = new CheckBox();
             textBoxNativeGw6 = new TextBox();
-            labelNativeDns4 = new Label();
+            checkBoxNativeDns4 = new CheckBox();
             textBoxNativeDns4 = new TextBox();
-            labelNativeDns6 = new Label();
+            checkBoxNativeDns6 = new CheckBox();
             textBoxNativeDns6 = new TextBox();
             buttonSaveNative = new Button();
             buttonLoadNative = new Button();
@@ -147,13 +147,13 @@
             // 
             // groupBoxNative
             // 
-            groupBoxNative.Controls.Add(labelNativeGw4);
+            groupBoxNative.Controls.Add(checkBoxNativeGw4);
             groupBoxNative.Controls.Add(textBoxNativeGw4);
-            groupBoxNative.Controls.Add(labelNativeGw6);
+            groupBoxNative.Controls.Add(checkBoxNativeGw6);
             groupBoxNative.Controls.Add(textBoxNativeGw6);
-            groupBoxNative.Controls.Add(labelNativeDns4);
+            groupBoxNative.Controls.Add(checkBoxNativeDns4);
             groupBoxNative.Controls.Add(textBoxNativeDns4);
-            groupBoxNative.Controls.Add(labelNativeDns6);
+            groupBoxNative.Controls.Add(checkBoxNativeDns6);
             groupBoxNative.Controls.Add(textBoxNativeDns6);
             groupBoxNative.Controls.Add(buttonSaveNative);
             groupBoxNative.Controls.Add(buttonLoadNative);
@@ -165,61 +165,77 @@
             groupBoxNative.TabStop = false;
             groupBoxNative.Text = "Native";
             // 
-            // labelNativeGw4
+            // checkBoxNativeGw4
             // 
-            labelNativeGw4.Location = new Point(6, 22);
-            labelNativeGw4.Name = "labelNativeGw4";
-            labelNativeGw4.Size = new Size(60, 24);
-            labelNativeGw4.TabIndex = 0;
-            labelNativeGw4.Text = "GW4:";
+            checkBoxNativeGw4.AutoSize = true;
+            checkBoxNativeGw4.Location = new Point(6, 25);
+            checkBoxNativeGw4.Name = "checkBoxNativeGw4";
+            checkBoxNativeGw4.Size = new Size(50, 19);
+            checkBoxNativeGw4.TabIndex = 11;
+            checkBoxNativeGw4.Text = "GW4";
+            checkBoxNativeGw4.UseVisualStyleBackColor = true;
+            checkBoxNativeGw4.CheckedChanged += CheckBox_CheckedChanged;
             // 
             // textBoxNativeGw4
             // 
+            textBoxNativeGw4.Enabled = false;
             textBoxNativeGw4.Location = new Point(72, 22);
             textBoxNativeGw4.Name = "textBoxNativeGw4";
             textBoxNativeGw4.Size = new Size(192, 23);
             textBoxNativeGw4.TabIndex = 0;
             // 
-            // labelNativeGw6
+            // checkBoxNativeGw6
             // 
-            labelNativeGw6.Location = new Point(6, 52);
-            labelNativeGw6.Name = "labelNativeGw6";
-            labelNativeGw6.Size = new Size(60, 24);
-            labelNativeGw6.TabIndex = 2;
-            labelNativeGw6.Text = "GW6:";
+            checkBoxNativeGw6.AutoSize = true;
+            checkBoxNativeGw6.Location = new Point(6, 55);
+            checkBoxNativeGw6.Name = "checkBoxNativeGw6";
+            checkBoxNativeGw6.Size = new Size(50, 19);
+            checkBoxNativeGw6.TabIndex = 12;
+            checkBoxNativeGw6.Text = "GW6";
+            checkBoxNativeGw6.UseVisualStyleBackColor = true;
+            checkBoxNativeGw6.CheckedChanged += CheckBox_CheckedChanged;
             // 
             // textBoxNativeGw6
             // 
+            textBoxNativeGw6.Enabled = false;
             textBoxNativeGw6.Location = new Point(72, 52);
             textBoxNativeGw6.Name = "textBoxNativeGw6";
             textBoxNativeGw6.Size = new Size(192, 23);
             textBoxNativeGw6.TabIndex = 1;
             // 
-            // labelNativeDns4
+            // checkBoxNativeDns4
             // 
-            labelNativeDns4.Location = new Point(6, 82);
-            labelNativeDns4.Name = "labelNativeDns4";
-            labelNativeDns4.Size = new Size(60, 24);
-            labelNativeDns4.TabIndex = 4;
-            labelNativeDns4.Text = "DNS4:";
+            checkBoxNativeDns4.AutoSize = true;
+            checkBoxNativeDns4.Location = new Point(6, 85);
+            checkBoxNativeDns4.Name = "checkBoxNativeDns4";
+            checkBoxNativeDns4.Size = new Size(57, 19);
+            checkBoxNativeDns4.TabIndex = 13;
+            checkBoxNativeDns4.Text = "DNS4";
+            checkBoxNativeDns4.UseVisualStyleBackColor = true;
+            checkBoxNativeDns4.CheckedChanged += CheckBox_CheckedChanged;
             // 
             // textBoxNativeDns4
             // 
+            textBoxNativeDns4.Enabled = false;
             textBoxNativeDns4.Location = new Point(72, 82);
             textBoxNativeDns4.Name = "textBoxNativeDns4";
             textBoxNativeDns4.Size = new Size(192, 23);
             textBoxNativeDns4.TabIndex = 2;
             // 
-            // labelNativeDns6
+            // checkBoxNativeDns6
             // 
-            labelNativeDns6.Location = new Point(6, 112);
-            labelNativeDns6.Name = "labelNativeDns6";
-            labelNativeDns6.Size = new Size(60, 24);
-            labelNativeDns6.TabIndex = 6;
-            labelNativeDns6.Text = "DNS6:";
+            checkBoxNativeDns6.AutoSize = true;
+            checkBoxNativeDns6.Location = new Point(6, 115);
+            checkBoxNativeDns6.Name = "checkBoxNativeDns6";
+            checkBoxNativeDns6.Size = new Size(57, 19);
+            checkBoxNativeDns6.TabIndex = 14;
+            checkBoxNativeDns6.Text = "DNS6";
+            checkBoxNativeDns6.UseVisualStyleBackColor = true;
+            checkBoxNativeDns6.CheckedChanged += CheckBox_CheckedChanged;
             // 
             // textBoxNativeDns6
             // 
+            textBoxNativeDns6.Enabled = false;
             textBoxNativeDns6.Location = new Point(72, 112);
             textBoxNativeDns6.Name = "textBoxNativeDns6";
             textBoxNativeDns6.Size = new Size(192, 23);
@@ -519,6 +535,11 @@
         private TextBox textBoxGw6;
         private TextBox textBoxDns4;
         private TextBox textBoxDns6;
+        // Native settings checkboxes
+        private CheckBox checkBoxNativeGw4;
+        private CheckBox checkBoxNativeGw6;
+        private CheckBox checkBoxNativeDns4;
+        private CheckBox checkBoxNativeDns6;
         private TextBox textBoxNativeGw4;
         private TextBox textBoxNativeGw6;
         private TextBox textBoxNativeDns4;
@@ -533,11 +554,7 @@
         // Toggle bar
         private TrackBar trackBarToggle;
 
-        // Native and Current field names
-        private Label labelNativeGw4;
-        private Label labelNativeGw6;
-        private Label labelNativeDns4;
-        private Label labelNativeDns6;
+        // Native and Current field names - Remove old Native labels since we're using checkboxes now
         private Label labelCurrentGw4;
         private Label labelCurrentGw6;
         private Label labelCurrentDns4;
