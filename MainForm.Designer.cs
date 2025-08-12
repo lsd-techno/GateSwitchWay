@@ -15,6 +15,8 @@
             if (disposing && (components != null))
             {
                 components.Dispose();
+                autoRefreshTimer?.Dispose();
+                clickTimer?.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -45,6 +47,8 @@
             textBoxNativeDns4 = new TextBox();
             labelNativeDns6 = new Label();
             textBoxNativeDns6 = new TextBox();
+            buttonSaveNative = new Button();
+            buttonLoadNative = new Button();
             groupBoxAlterNative = new GroupBox();
             checkBoxGw4 = new CheckBox();
             checkBoxGw6 = new CheckBox();
@@ -65,11 +69,17 @@
             textBoxCurrentDns6 = new TextBox();
             trackBarToggle = new TrackBar();
             autoAlterMenu = new ToolStripMenuItem();
+            refreshIntervalMenu = new ToolStripMenuItem();
+            checkBoxAutoRefresh = new CheckBox();
+            labelRefreshInterval = new Label();
+            numericUpDownRefreshInterval = new NumericUpDown();
+            labelRefreshIntervalUnit = new Label();
             contextMenuStrip1.SuspendLayout();
             groupBoxNative.SuspendLayout();
             groupBoxAlterNative.SuspendLayout();
             groupBoxCurrent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarToggle).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownRefreshInterval).BeginInit();
             SuspendLayout();
             // 
             // notifyIcon1
@@ -82,9 +92,9 @@
             // contextMenuStrip1
             // 
             contextMenuStrip1.BackColor = SystemColors.ButtonShadow;
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { mainToolStripMenuItem, startHiddenMenu, autoAlterMenu, autoStartMenu, toolStripSeparator1, exitToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { mainToolStripMenuItem, startHiddenMenu, autoAlterMenu, refreshIntervalMenu, autoStartMenu, toolStripSeparator1, exitToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 142);
+            contextMenuStrip1.Size = new Size(181, 164);
             // 
             // mainToolStripMenuItem
             // 
@@ -145,10 +155,12 @@
             groupBoxNative.Controls.Add(textBoxNativeDns4);
             groupBoxNative.Controls.Add(labelNativeDns6);
             groupBoxNative.Controls.Add(textBoxNativeDns6);
+            groupBoxNative.Controls.Add(buttonSaveNative);
+            groupBoxNative.Controls.Add(buttonLoadNative);
             groupBoxNative.Font = new Font("Segoe UI", 9F);
             groupBoxNative.Location = new Point(12, 12);
             groupBoxNative.Name = "groupBoxNative";
-            groupBoxNative.Size = new Size(270, 150);
+            groupBoxNative.Size = new Size(270, 180);
             groupBoxNative.TabIndex = 0;
             groupBoxNative.TabStop = false;
             groupBoxNative.Text = "Native";
@@ -165,7 +177,6 @@
             // 
             textBoxNativeGw4.Location = new Point(72, 22);
             textBoxNativeGw4.Name = "textBoxNativeGw4";
-            textBoxNativeGw4.ReadOnly = true;
             textBoxNativeGw4.Size = new Size(192, 23);
             textBoxNativeGw4.TabIndex = 0;
             // 
@@ -181,7 +192,6 @@
             // 
             textBoxNativeGw6.Location = new Point(72, 52);
             textBoxNativeGw6.Name = "textBoxNativeGw6";
-            textBoxNativeGw6.ReadOnly = true;
             textBoxNativeGw6.Size = new Size(192, 23);
             textBoxNativeGw6.TabIndex = 1;
             // 
@@ -197,7 +207,6 @@
             // 
             textBoxNativeDns4.Location = new Point(72, 82);
             textBoxNativeDns4.Name = "textBoxNativeDns4";
-            textBoxNativeDns4.ReadOnly = true;
             textBoxNativeDns4.Size = new Size(192, 23);
             textBoxNativeDns4.TabIndex = 2;
             // 
@@ -213,9 +222,28 @@
             // 
             textBoxNativeDns6.Location = new Point(72, 112);
             textBoxNativeDns6.Name = "textBoxNativeDns6";
-            textBoxNativeDns6.ReadOnly = true;
             textBoxNativeDns6.Size = new Size(192, 23);
             textBoxNativeDns6.TabIndex = 3;
+            // 
+            // buttonSaveNative
+            // 
+            buttonSaveNative.Location = new Point(72, 145);
+            buttonSaveNative.Name = "buttonSaveNative";
+            buttonSaveNative.Size = new Size(92, 23);
+            buttonSaveNative.TabIndex = 4;
+            buttonSaveNative.Text = "Save";
+            buttonSaveNative.UseVisualStyleBackColor = true;
+            buttonSaveNative.Click += buttonSaveNative_Click;
+            // 
+            // buttonLoadNative
+            // 
+            buttonLoadNative.Location = new Point(172, 145);
+            buttonLoadNative.Name = "buttonLoadNative";
+            buttonLoadNative.Size = new Size(92, 23);
+            buttonLoadNative.TabIndex = 5;
+            buttonLoadNative.Text = "Load Current";
+            buttonLoadNative.UseVisualStyleBackColor = true;
+            buttonLoadNative.Click += buttonLoadNative_Click;
             // 
             // groupBoxAlterNative
             // 
@@ -312,9 +340,13 @@
             groupBoxCurrent.Controls.Add(textBoxCurrentDns4);
             groupBoxCurrent.Controls.Add(labelCurrentDns6);
             groupBoxCurrent.Controls.Add(textBoxCurrentDns6);
-            groupBoxCurrent.Location = new Point(12, 181);
+            groupBoxCurrent.Controls.Add(checkBoxAutoRefresh);
+            groupBoxCurrent.Controls.Add(labelRefreshInterval);
+            groupBoxCurrent.Controls.Add(numericUpDownRefreshInterval);
+            groupBoxCurrent.Controls.Add(labelRefreshIntervalUnit);
+            groupBoxCurrent.Location = new Point(12, 205);
             groupBoxCurrent.Name = "groupBoxCurrent";
-            groupBoxCurrent.Size = new Size(270, 150);
+            groupBoxCurrent.Size = new Size(270, 180);
             groupBoxCurrent.TabIndex = 2;
             groupBoxCurrent.TabStop = false;
             groupBoxCurrent.Text = "Current";
@@ -393,6 +425,50 @@
             trackBarToggle.TickStyle = TickStyle.None;
             trackBarToggle.ValueChanged += TrackBarToggle_ValueChanged;
             // 
+            // refreshIntervalMenu
+            // 
+            refreshIntervalMenu.Name = "refreshIntervalMenu";
+            refreshIntervalMenu.Size = new Size(180, 22);
+            refreshIntervalMenu.Text = "Auto Refresh";
+            refreshIntervalMenu.Click += refreshIntervalMenu_Click;
+            // 
+            // checkBoxAutoRefresh
+            // 
+            checkBoxAutoRefresh.AutoSize = true;
+            checkBoxAutoRefresh.Location = new Point(210, 142);
+            checkBoxAutoRefresh.Name = "checkBoxAutoRefresh";
+            checkBoxAutoRefresh.Size = new Size(54, 19);
+            checkBoxAutoRefresh.TabIndex = 7;
+            checkBoxAutoRefresh.Text = "Auto";
+            checkBoxAutoRefresh.UseVisualStyleBackColor = true;
+            checkBoxAutoRefresh.CheckedChanged += CheckBox_CheckedChanged;
+            // 
+            // labelRefreshInterval
+            // 
+            labelRefreshInterval.AutoSize = true;
+            labelRefreshInterval.Location = new Point(6, 142);
+            labelRefreshInterval.Name = "labelRefreshInterval";
+            labelRefreshInterval.Size = new Size(55, 15);
+            labelRefreshInterval.TabIndex = 8;
+            labelRefreshInterval.Text = "Interval:";
+            // 
+            // numericUpDownRefreshInterval
+            // 
+            numericUpDownRefreshInterval.Location = new Point(72, 140);
+            numericUpDownRefreshInterval.Name = "numericUpDownRefreshInterval";
+            numericUpDownRefreshInterval.Size = new Size(92, 23);
+            numericUpDownRefreshInterval.TabIndex = 9;
+            numericUpDownRefreshInterval.ValueChanged += NumericUpDownRefreshInterval_ValueChanged;
+            // 
+            // labelRefreshIntervalUnit
+            // 
+            labelRefreshIntervalUnit.AutoSize = true;
+            labelRefreshIntervalUnit.Location = new Point(170, 142);
+            labelRefreshIntervalUnit.Name = "labelRefreshIntervalUnit";
+            labelRefreshIntervalUnit.Size = new Size(36, 15);
+            labelRefreshIntervalUnit.TabIndex = 10;
+            labelRefreshIntervalUnit.Text = "secs";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -416,6 +492,7 @@
             groupBoxCurrent.ResumeLayout(false);
             groupBoxCurrent.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarToggle).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownRefreshInterval).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -429,6 +506,7 @@
         private ToolStripMenuItem autoStartMenu;
         private ToolStripMenuItem startHiddenMenu;
         private ToolStripMenuItem autoAlterMenu;
+        private ToolStripMenuItem refreshIntervalMenu;
         private GroupBox groupBoxNative;
         private GroupBox groupBoxAlterNative;
         private GroupBox groupBoxCurrent;
@@ -449,6 +527,8 @@
         private TextBox textBoxCurrentGw6;
         private TextBox textBoxCurrentDns4;
         private TextBox textBoxCurrentDns6;
+        private Button buttonSaveNative;
+        private Button buttonLoadNative;
 
         // Toggle bar
         private TrackBar trackBarToggle;
@@ -462,5 +542,9 @@
         private Label labelCurrentGw6;
         private Label labelCurrentDns4;
         private Label labelCurrentDns6;
+        private CheckBox checkBoxAutoRefresh;
+        private Label labelRefreshInterval;
+        private NumericUpDown numericUpDownRefreshInterval;
+        private Label labelRefreshIntervalUnit;
     }
 }

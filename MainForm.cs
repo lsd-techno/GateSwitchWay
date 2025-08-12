@@ -1,4 +1,5 @@
 using Microsoft.Win32;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Net.NetworkInformation;
@@ -16,6 +17,9 @@ namespace GateSwitchWay
 
         private NetworkHelper.NetworkInfo currentNetworkInfo;
         private NetworkHelper.NetworkInfo alternativeNetworkInfo;
+
+        // Auto-refresh timer for network status
+        private System.Windows.Forms.Timer autoRefreshTimer = new System.Windows.Forms.Timer();
 
         public MainForm()
         {
@@ -38,6 +42,15 @@ namespace GateSwitchWay
 
             isLoadingSettings = true;
             NetworkHelper.LoadAlterNativeSettings(textBoxGw4, textBoxGw6, textBoxDns4, textBoxDns6, checkBoxGw4, checkBoxGw6, checkBoxDns4, checkBoxDns6);
+
+            // Load native settings to UI
+            NetworkHelper.LoadNativeSettingsToUI(textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6);
+
+            // Initialize auto-refresh settings
+            checkBoxAutoRefresh.Checked = Settings.Default.AutoRefreshEnabled;
+            numericUpDownRefreshInterval.Value = Settings.Default.AutoRefreshInterval / 1000; // Convert to seconds
+            numericUpDownRefreshInterval.Minimum = 1;
+            numericUpDownRefreshInterval.Maximum = 300; // 5 minutes max
 
             // Check if there are any saved AlterNative settings
             alternativeNetworkInfo = NetworkHelper.GetAlterNativeSettings();
@@ -86,6 +99,9 @@ namespace GateSwitchWay
             isLoadingSettings = false;
             TrackBar_Set(isSwitchedOn);
 
+            // Setup auto-refresh timer
+            SetupAutoRefreshTimer();
+
             clickTimer.Interval = SystemInformation.DoubleClickTime - 1; // Just under the double-click speed
             clickTimer.Tick += (s, e) =>
             {
@@ -106,6 +122,7 @@ namespace GateSwitchWay
                     UpdateContextMenuTheme(notifyIcon1.ContextMenuStrip);
                     autoStartMenu.Checked = AppAutoStart.GetAutoStart();
                     mainToolStripMenuItem.Checked = this.Visible;
+                    refreshIntervalMenu.Checked = Settings.Default.AutoRefreshEnabled;
                 };
             }
 
@@ -119,6 +136,70 @@ namespace GateSwitchWay
             }
         }
 
+        private void SetupAutoRefreshTimer()
+        {
+            autoRefreshTimer.Interval = Settings.Default.AutoRefreshInterval; // Default 5 seconds from settings
+            autoRefreshTimer.Tick += AutoRefreshTimer_Tick;
+            
+            // Start timer only if auto-refresh is enabled
+            if (Settings.Default.AutoRefreshEnabled)
+            {
+                autoRefreshTimer.Start();
+            }
+        }
+
+        private void AutoRefreshTimer_Tick(object sender, EventArgs e)
+        {
+            // Only update if auto-refresh is enabled
+            if (!Settings.Default.AutoRefreshEnabled)
+            {
+                autoRefreshTimer.Stop();
+                return;
+            }
+
+            // Get current network information
+            var latestNetworkInfo = NetworkHelper.GetCurrentNetworkInfo();
+            
+            // Update current network info textboxes
+            NetworkHelper.PopulateNetworkInfoTextBoxes(latestNetworkInfo, textBoxCurrentGw4, textBoxCurrentGw6, textBoxCurrentDns4, textBoxCurrentDns6);
+            
+            // Update taskbar network info
+            NetworkHelper.UpdateTaskbarNetworkInfo(latestNetworkInfo, notifyIcon1, isSwitchedOn);
+            
+            // Update currentNetworkInfo for consistency
+            if (!isSwitchedOn)
+            {
+                currentNetworkInfo = latestNetworkInfo;
+            }
+        }
+
+        private void buttonSaveNative_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                NetworkHelper.SaveNativeSettingsFromUI(textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6);
+                MessageBox.Show("Native network settings saved successfully!", "Settings Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to save native settings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonLoadNative_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var currentInfo = NetworkHelper.GetCurrentNetworkInfo();
+                NetworkHelper.PopulateNetworkInfoTextBoxes(currentInfo, textBoxNativeGw4, textBoxNativeGw6, textBoxNativeDns4, textBoxNativeDns6);
+                MessageBox.Show("Current network settings loaded into Native settings!", "Settings Loaded", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to load current settings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
@@ -126,6 +207,13 @@ namespace GateSwitchWay
             AlterCheckBoxes_ReEnable();
             DisplayCurrentMode(isSwitchedOn);
             TrackBar_Set(isSwitchedOn);
+            
+            // Initialize auto-refresh UI state
+            isLoadingSettings = true;
+            checkBoxAutoRefresh.Checked = Settings.Default.AutoRefreshEnabled;
+            numericUpDownRefreshInterval.Value = Settings.Default.AutoRefreshInterval / 1000;
+            isLoadingSettings = false;
+            
             // Hide main window if startHidden is true
             if (startHidden)
             {
@@ -396,6 +484,24 @@ namespace GateSwitchWay
                             needSave = true;
                             break;
                         }
+                    case "checkBoxAutoRefresh":
+                        {
+                            if (!isLoadingSettings)
+                            {
+                                Settings.Default.AutoRefreshEnabled = checkBoxAutoRefresh.Checked;
+                                Settings.Default.Save();
+                                
+                                if (checkBoxAutoRefresh.Checked)
+                                {
+                                    autoRefreshTimer.Start();
+                                }
+                                else
+                                {
+                                    autoRefreshTimer.Stop();
+                                }
+                            }
+                            break;
+                        }
                 }
                 if (!isLoadingSettings)
                 {
@@ -403,6 +509,32 @@ namespace GateSwitchWay
                     {
                         NetworkHelper.SaveAlterNativeSettings(textBoxGw4, textBoxGw6, textBoxDns4, textBoxDns6, checkBoxGw4, checkBoxGw6, checkBoxDns4, checkBoxDns6);
                     }
+                }
+            }
+        }
+
+        private void refreshIntervalMenu_Click(object sender, EventArgs e)
+        {
+            // Toggle auto-refresh setting
+            checkBoxAutoRefresh.Checked = !checkBoxAutoRefresh.Checked;
+        }
+
+        private void NumericUpDownRefreshInterval_ValueChanged(object sender, EventArgs e)
+        {
+            if (!isLoadingSettings)
+            {
+                int newInterval = (int)(numericUpDownRefreshInterval.Value * 1000); // Convert to milliseconds
+                Settings.Default.AutoRefreshInterval = newInterval;
+                Settings.Default.Save();
+                
+                // Update timer interval
+                autoRefreshTimer.Interval = newInterval;
+                
+                // Restart timer if it's running
+                if (autoRefreshTimer.Enabled)
+                {
+                    autoRefreshTimer.Stop();
+                    autoRefreshTimer.Start();
                 }
             }
         }

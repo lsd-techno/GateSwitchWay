@@ -37,6 +37,30 @@ namespace GateSwitchWay {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
+        public int AutoRefreshInterval {
+            get {
+                return ((int)(this["AutoRefreshInterval"]));
+            }
+            set {
+                this["AutoRefreshInterval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoRefreshEnabled {
+            get {
+                return ((bool)(this["AutoRefreshEnabled"]));
+            }
+            set {
+                this["AutoRefreshEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool AlterNativeGw4Enabled {
             get {
