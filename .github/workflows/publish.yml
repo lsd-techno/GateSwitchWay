@@ -40,7 +40,7 @@ jobs:
           echo "✓ All validation checks passed"
         shell: pwsh
 
-      - name: Publish Application as Single File
+      - name: Publish Full Install (Self-Contained)
         run: |
           try {
             $version = git describe --tags --abbrev=0 2>$null
@@ -52,49 +52,118 @@ jobs:
           }
           echo "Building version: $version"
           
+          # Create full install (self-contained with .NET runtime)
+          echo "Creating full install package..."
           dotnet publish GateSwitchWay.csproj `
             --configuration Release `
             --runtime win-x64 `
             --self-contained true `
-            --output "publish" `
+            --output "publish-full" `
             -p:PublishSingleFile=true `
             -p:IncludeNativeLibrariesForSelfExtract=true `
             -p:PublishTrimmed=false `
-            -p:AssemblyName="GateSwitchWay-$version"
+            -p:AssemblyName="GateSwitchWay-$version-full"
           
-          # Verify the executable was created
-          $exePath = "publish\GateSwitchWay-$version.exe"
-          if (Test-Path $exePath) {
-            $size = (Get-Item $exePath).Length
-            echo "Successfully created executable: $exePath (Size: $([math]::Round($size / 1MB, 2)) MB)"
+          # Verify the full install executable was created
+          $exePathFull = "publish-full\GateSwitchWay-$version-full.exe"
+          if (Test-Path $exePathFull) {
+            $sizeFull = (Get-Item $exePathFull).Length
+            echo "Successfully created full install: $exePathFull (Size: $([math]::Round($sizeFull / 1MB, 2)) MB)"
             # Copy to root for artifact upload
-            Copy-Item $exePath "GateSwitchWay-$version.exe"
+            Copy-Item $exePathFull "GateSwitchWay-$version-full.exe"
           } else {
-            echo "ERROR: Executable not found at $exePath"
+            echo "ERROR: Full install executable not found at $exePathFull"
             exit 1
           }
         shell: pwsh
 
-      - name: Upload Published Artifacts
+      - name: Publish Update Package (Framework-Dependent)
+        run: |
+          try {
+            $version = git describe --tags --abbrev=0 2>$null
+            if ($LASTEXITCODE -ne 0) {
+              $version = "0.0.0"
+            }
+          } catch {
+            $version = "0.0.0"
+          }
+          
+          # Create update package (framework-dependent, requires .NET 8 runtime)
+          echo "Creating update package..."
+          dotnet publish GateSwitchWay.csproj `
+            --configuration Release `
+            --runtime win-x64 `
+            --self-contained false `
+            --output "publish-update" `
+            -p:PublishSingleFile=true `
+            -p:AssemblyName="GateSwitchWay-$version-update"
+          
+          # Verify the update executable was created
+          $exePathUpdate = "publish-update\GateSwitchWay-$version-update.exe"
+          if (Test-Path $exePathUpdate) {
+            $sizeUpdate = (Get-Item $exePathUpdate).Length
+            echo "Successfully created update package: $exePathUpdate (Size: $([math]::Round($sizeUpdate / 1KB, 2)) KB)"
+            # Copy to root for artifact upload
+            Copy-Item $exePathUpdate "GateSwitchWay-$version-update.exe"
+          } else {
+            echo "ERROR: Update executable not found at $exePathUpdate"
+            exit 1
+          }
+        shell: pwsh
+
+      - name: Upload Full Install Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: published-artifacts
-          path: GateSwitchWay-*.exe
+          name: full-install
+          path: GateSwitchWay-*-full.exe
+          
+      - name: Upload Update Package Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: update-package
+          path: GateSwitchWay-*-update.exe
           
       - name: Artifact Information
         run: |
           echo "Build completed successfully!"
-          echo "Artifact details:"
-          Get-ChildItem "GateSwitchWay-*.exe" | ForEach-Object {
+          echo ""
+          echo "=== FULL INSTALL PACKAGE ==="
+          Get-ChildItem "GateSwitchWay-*-full.exe" | ForEach-Object {
             $size = [math]::Round($_.Length / 1MB, 2)
             echo "  - File: $($_.Name)"
             echo "  - Size: $size MB"
-            echo "  - Created: $($_.CreationTime)"
+            echo "  - Use case: Clean installation (includes .NET runtime)"
+            echo "  - Requirements: None - runs on any Windows system"
           }
           echo ""
-          echo "Download instructions:"
+          echo "=== UPDATE PACKAGE ==="
+          Get-ChildItem "GateSwitchWay-*-update.exe" | ForEach-Object {
+            $size = [math]::Round($_.Length / 1KB, 2)
+            echo "  - File: $($_.Name)"
+            echo "  - Size: $size KB"
+            echo "  - Use case: Updates for existing installations"
+            echo "  - Requirements: .NET 8 runtime must be pre-installed"
+          }
+          echo ""
+          echo "=== DOWNLOAD INSTRUCTIONS ==="
           echo "1. Go to the Actions tab in GitHub"
           echo "2. Click on this workflow run"
-          echo "3. Download the 'published-artifacts' zip file"
+          echo "3. Choose the appropriate download:"
+          echo "   - 'full-install' for new installations (~60MB)"
+          echo "   - 'update-package' for updates (~0.5MB, requires .NET 8)"
           echo "4. Extract and run as Administrator (required for network configuration)"
+          echo ""
+          echo "=== PACKAGE COMPARISON ==="
+          $fullFiles = Get-ChildItem "GateSwitchWay-*-full.exe"
+          $updateFiles = Get-ChildItem "GateSwitchWay-*-update.exe"
+          if ($fullFiles -and $updateFiles) {
+            $fullSize = $fullFiles[0].Length
+            $updateSize = $updateFiles[0].Length
+            $ratio = [math]::Round($fullSize / $updateSize, 1)
+            echo "  - Full install: $([math]::Round($fullSize / 1MB, 1)) MB"
+            echo "  - Update package: $([math]::Round($updateSize / 1KB, 1)) KB"
+            echo "  - Size reduction: ${ratio}x smaller for updates"
+          } else {
+            echo "  - Could not compare sizes (files not found)"
+          }
         shell: pwsh

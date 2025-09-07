@@ -27,18 +27,51 @@ The application allows users to configure the following settings:
 
 ## Requirements
 
-- .NET 8
 - Windows operating system
+- .NET 8 (for update packages only - full install includes .NET runtime)
 
 ## Installation
 
-### option 1:
-1. ~~Download the latest release from the [releases page](#).~~
-2. ~~Run the installer and follow the on-screen instructions.~~
+Choose the appropriate package based on your needs:
 
-### option 2:
-1. Download latest version from [`Actions`](https://github.com/lsd-techno/GateSwitchWay/actions) page, `published-artifacts` from latest successful run
-2. Unzip, start, use...
+### Full Install (New Installation)
+**Size:** ~60MB | **Requirements:** None
+
+1. Go to [`Actions`](https://github.com/lsd-techno/GateSwitchWay/actions) page
+2. Click on the latest successful workflow run
+3. Download the `full-install` artifact
+4. Extract and run `GateSwitchWay-{version}-full.exe` as Administrator
+
+*Use this option if you don't have .NET 8 installed or for clean installations.*
+
+### Update Package (Existing Installation)
+**Size:** ~0.5MB | **Requirements:** .NET 8 runtime pre-installed
+
+1. Go to [`Actions`](https://github.com/lsd-techno/GateSwitchWay/actions) page
+2. Click on the latest successful workflow run
+3. Download the `update-package` artifact
+4. Extract and run `GateSwitchWay-{version}-update.exe` as Administrator
+
+*Use this option for updates if you already have .NET 8 installed. Downloads 120x faster than full install.*
+
+### .NET 8 Runtime Installation
+If you choose the update package but don't have .NET 8 installed:
+1. Download .NET 8 Runtime from [Microsoft's official site](https://dotnet.microsoft.com/download/dotnet/8.0)
+2. Install the **Desktop Runtime** (not just the runtime)
+3. Then use the update package for future updates
+
+### Package Comparison
+
+| Feature | Full Install | Update Package |
+|---------|-------------|----------------|
+| **Size** | ~60MB | ~0.5MB |
+| **Download Time** | Slower | 120x faster |
+| **Requirements** | None | .NET 8 runtime |
+| **Use Case** | New installations | Updates |
+| **Includes .NET Runtime** | ✅ Yes | ❌ No |
+| **Offline Installation** | ✅ Yes | ❌ Requires .NET 8 |
+
+**Recommendation:** Use full install for your first installation, then switch to update packages for future updates to save bandwidth and time.
 
 ## License
 
