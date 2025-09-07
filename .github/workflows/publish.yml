@@ -25,6 +25,21 @@ jobs:
       - name: Build Solution
         run: dotnet build GateSwitchWay.sln --configuration Release --no-restore
 
+      - name: Basic Validation
+        run: |
+          echo "Validating project structure and basic compilation..."
+          # Check if key files exist
+          if (!(Test-Path "GateSwitchWay.csproj")) { throw "Project file not found" }
+          if (!(Test-Path "Program.cs")) { throw "Program.cs not found" }
+          if (!(Test-Path "MainForm.cs")) { throw "MainForm.cs not found" }
+          if (!(Test-Path "app.manifest")) { throw "Application manifest not found" }
+          
+          # Check if built output exists
+          if (!(Test-Path "bin\Release\net8.0-windows\GateSwitchWay.dll")) { throw "Build output not found" }
+          
+          echo "✓ All validation checks passed"
+        shell: pwsh
+
       - name: Publish Application as Single File
         run: |
           try {
@@ -65,3 +80,21 @@ jobs:
         with:
           name: published-artifacts
           path: GateSwitchWay-*.exe
+          
+      - name: Artifact Information
+        run: |
+          echo "Build completed successfully!"
+          echo "Artifact details:"
+          Get-ChildItem "GateSwitchWay-*.exe" | ForEach-Object {
+            $size = [math]::Round($_.Length / 1MB, 2)
+            echo "  - File: $($_.Name)"
+            echo "  - Size: $size MB"
+            echo "  - Created: $($_.CreationTime)"
+          }
+          echo ""
+          echo "Download instructions:"
+          echo "1. Go to the Actions tab in GitHub"
+          echo "2. Click on this workflow run"
+          echo "3. Download the 'published-artifacts' zip file"
+          echo "4. Extract and run as Administrator (required for network configuration)"
+        shell: pwsh
