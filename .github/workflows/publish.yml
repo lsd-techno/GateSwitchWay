@@ -1,0 +1,67 @@
+name: .NET 8.0 Build, Publish, and Artifact Upload
+
+on:
+  push:
+    branches: [ "main" ]
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore GateSwitchWay.sln
+
+      - name: Build Solution
+        run: dotnet build GateSwitchWay.sln --configuration Release --no-restore
+
+      - name: Publish Application as Single File
+        run: |
+          try {
+            $version = git describe --tags --abbrev=0 2>$null
+            if ($LASTEXITCODE -ne 0) {
+              $version = "0.0.0"
+            }
+          } catch {
+            $version = "0.0.0"
+          }
+          echo "Building version: $version"
+          
+          dotnet publish GateSwitchWay.csproj `
+            --configuration Release `
+            --runtime win-x64 `
+            --self-contained true `
+            --output "publish" `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -p:PublishTrimmed=false `
+            -p:AssemblyName="GateSwitchWay-$version"
+          
+          # Verify the executable was created
+          $exePath = "publish\GateSwitchWay-$version.exe"
+          if (Test-Path $exePath) {
+            $size = (Get-Item $exePath).Length
+            echo "Successfully created executable: $exePath (Size: $([math]::Round($size / 1MB, 2)) MB)"
+            # Copy to root for artifact upload
+            Copy-Item $exePath "GateSwitchWay-$version.exe"
+          } else {
+            echo "ERROR: Executable not found at $exePath"
+            exit 1
+          }
+        shell: pwsh
+
+      - name: Upload Published Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-artifacts
+          path: GateSwitchWay-*.exe
