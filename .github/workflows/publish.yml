@@ -1,0 +1,100 @@
+name: .NET 8.0 Build, Publish, and Artifact Upload
+
+on:
+  push:
+    branches: [ "main" ]
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore GateSwitchWay.sln
+
+      - name: Build Solution
+        run: dotnet build GateSwitchWay.sln --configuration Release --no-restore
+
+      - name: Basic Validation
+        run: |
+          echo "Validating project structure and basic compilation..."
+          # Check if key files exist
+          if (!(Test-Path "GateSwitchWay.csproj")) { throw "Project file not found" }
+          if (!(Test-Path "Program.cs")) { throw "Program.cs not found" }
+          if (!(Test-Path "MainForm.cs")) { throw "MainForm.cs not found" }
+          if (!(Test-Path "app.manifest")) { throw "Application manifest not found" }
+          
+          # Check if built output exists
+          if (!(Test-Path "bin\Release\net8.0-windows\GateSwitchWay.dll")) { throw "Build output not found" }
+          
+          echo "✓ All validation checks passed"
+        shell: pwsh
+
+      - name: Publish Application as Single File
+        run: |
+          try {
+            $version = git describe --tags --abbrev=0 2>$null
+            if ($LASTEXITCODE -ne 0) {
+              $version = "0.0.0"
+            }
+          } catch {
+            $version = "0.0.0"
+          }
+          echo "Building version: $version"
+          
+          dotnet publish GateSwitchWay.csproj `
+            --configuration Release `
+            --runtime win-x64 `
+            --self-contained true `
+            --output "publish" `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -p:PublishTrimmed=false `
+            -p:AssemblyName="GateSwitchWay-$version"
+          
+          # Verify the executable was created
+          $exePath = "publish\GateSwitchWay-$version.exe"
+          if (Test-Path $exePath) {
+            $size = (Get-Item $exePath).Length
+            echo "Successfully created executable: $exePath (Size: $([math]::Round($size / 1MB, 2)) MB)"
+            # Copy to root for artifact upload
+            Copy-Item $exePath "GateSwitchWay-$version.exe"
+          } else {
+            echo "ERROR: Executable not found at $exePath"
+            exit 1
+          }
+        shell: pwsh
+
+      - name: Upload Published Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-artifacts
+          path: GateSwitchWay-*.exe
+          
+      - name: Artifact Information
+        run: |
+          echo "Build completed successfully!"
+          echo "Artifact details:"
+          Get-ChildItem "GateSwitchWay-*.exe" | ForEach-Object {
+            $size = [math]::Round($_.Length / 1MB, 2)
+            echo "  - File: $($_.Name)"
+            echo "  - Size: $size MB"
+            echo "  - Created: $($_.CreationTime)"
+          }
+          echo ""
+          echo "Download instructions:"
+          echo "1. Go to the Actions tab in GitHub"
+          echo "2. Click on this workflow run"
+          echo "3. Download the 'published-artifacts' zip file"
+          echo "4. Extract and run as Administrator (required for network configuration)"
+        shell: pwsh
