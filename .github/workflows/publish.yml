@@ -154,10 +154,16 @@ jobs:
           echo "4. Extract and run as Administrator (required for network configuration)"
           echo ""
           echo "=== PACKAGE COMPARISON ==="
-          $fullSize = (Get-Item "GateSwitchWay-*-full.exe").Length
-          $updateSize = (Get-Item "GateSwitchWay-*-update.exe").Length
-          $ratio = [math]::Round($fullSize / $updateSize, 1)
-          echo "  - Full install: $([math]::Round($fullSize / 1MB, 1)) MB"
-          echo "  - Update package: $([math]::Round($updateSize / 1KB, 1)) KB"
-          echo "  - Size reduction: ${ratio}x smaller for updates"
+          $fullFiles = Get-ChildItem "GateSwitchWay-*-full.exe"
+          $updateFiles = Get-ChildItem "GateSwitchWay-*-update.exe"
+          if ($fullFiles -and $updateFiles) {
+            $fullSize = $fullFiles[0].Length
+            $updateSize = $updateFiles[0].Length
+            $ratio = [math]::Round($fullSize / $updateSize, 1)
+            echo "  - Full install: $([math]::Round($fullSize / 1MB, 1)) MB"
+            echo "  - Update package: $([math]::Round($updateSize / 1KB, 1)) KB"
+            echo "  - Size reduction: ${ratio}x smaller for updates"
+          } else {
+            echo "  - Could not compare sizes (files not found)"
+          }
         shell: pwsh
