@@ -9,6 +9,8 @@ GateSwitchWay is a simple Windows desktop application that allows users to switc
 - **System Tray Integration**: Control the application from the system tray with single and double-click actions.
 - **Dark Mode Support**: Context menu adapts to the system's light or dark theme.
 
+> Note: This fork is an experiment to have the repository largely maintained by a supervised Copilot (AI-assisted). Human reviewers will supervise and review changes before merging. Contributions are welcome; please follow the contribution guidelines.
+
 ## Settings
 
 The application allows users to configure the following settings:
