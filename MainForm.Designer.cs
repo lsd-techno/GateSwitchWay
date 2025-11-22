@@ -17,6 +17,9 @@
                 components.Dispose();
                 autoRefreshTimer?.Dispose();
                 clickTimer?.Dispose();
+                
+                // Unsubscribe from system theme changes
+                Microsoft.Win32.SystemEvents.UserPreferenceChanged -= OnSystemThemeChanged;
             }
             base.Dispose(disposing);
         }
@@ -91,7 +94,6 @@
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.BackColor = SystemColors.ButtonShadow;
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { mainToolStripMenuItem, startHiddenMenu, autoAlterMenu, refreshIntervalMenu, autoStartMenu, toolStripSeparator1, exitToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
             contextMenuStrip1.Size = new Size(181, 164);
@@ -491,7 +493,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BackColor = SystemColors.ButtonShadow;
             ClientSize = new Size(800, 450);
             Controls.Add(groupBoxNative);
             Controls.Add(trackBarToggle);
