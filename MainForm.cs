@@ -29,18 +29,12 @@ namespace GateSwitchWay
         // Track the last applied theme to avoid unnecessary reapplications
         private bool? lastAppliedThemeWasLight = null;
 
-        // Cached delegate for theme updates to avoid allocations
-        private Action? cachedThemeUpdateAction = null;
-
         // Auto-refresh timer for network status
         private System.Windows.Forms.Timer autoRefreshTimer = new System.Windows.Forms.Timer();
 
         public MainForm()
         {
             InitializeComponent();
-            
-            // Initialize cached theme update action
-            cachedThemeUpdateAction = ApplyThemeToMainForm;
             
             // Apply initial theme before any other UI operations
             ApplyThemeToMainForm();
@@ -592,10 +586,10 @@ namespace GateSwitchWay
             // Only respond to theme changes (General category includes theme changes)
             if (e.Category == Microsoft.Win32.UserPreferenceCategory.General)
             {
-                // Apply the new theme using cached delegate
+                // Apply the new theme
                 if (this.InvokeRequired)
                 {
-                    this.BeginInvoke(cachedThemeUpdateAction);
+                    this.BeginInvoke(ApplyThemeToMainForm);
                 }
                 else
                 {
