@@ -15,6 +15,14 @@ namespace GateSwitchWay
         private static bool isLoadingSettings = false;
         private static bool isAutoAlterOn = false;
 
+        // Dark mode color constants
+        private static readonly Color DarkFormBackground = Color.FromArgb(32, 32, 32);
+        private static readonly Color DarkGroupBoxBackground = Color.FromArgb(45, 45, 45);
+        private static readonly Color DarkControlBackground = Color.FromArgb(55, 55, 55);
+        private static readonly Color DarkButtonBackground = Color.FromArgb(60, 60, 60);
+        private static readonly Color DarkButtonBorder = Color.FromArgb(80, 80, 80);
+        private static readonly Color DarkForeground = Color.LightGray;
+
         private NetworkHelper.NetworkInfo currentNetworkInfo;
         private NetworkHelper.NetworkInfo alternativeNetworkInfo;
 
@@ -446,8 +454,8 @@ namespace GateSwitchWay
             }
             else
             {
-                this.BackColor = Color.FromArgb(32, 32, 32);
-                this.ForeColor = Color.LightGray;
+                this.BackColor = DarkFormBackground;
+                this.ForeColor = DarkForeground;
             }
 
             // Apply theme to all group boxes
@@ -470,8 +478,8 @@ namespace GateSwitchWay
             }
             else
             {
-                groupBox.BackColor = Color.FromArgb(45, 45, 45);
-                groupBox.ForeColor = Color.LightGray;
+                groupBox.BackColor = DarkGroupBoxBackground;
+                groupBox.ForeColor = DarkForeground;
             }
 
             // Apply theme to all controls within the group box
@@ -492,8 +500,8 @@ namespace GateSwitchWay
                 }
                 else
                 {
-                    textBox.BackColor = Color.FromArgb(55, 55, 55);
-                    textBox.ForeColor = Color.LightGray;
+                    textBox.BackColor = DarkControlBackground;
+                    textBox.ForeColor = DarkForeground;
                 }
             }
             else if (control is Button button)
@@ -506,10 +514,10 @@ namespace GateSwitchWay
                 }
                 else
                 {
-                    button.BackColor = Color.FromArgb(60, 60, 60);
-                    button.ForeColor = Color.LightGray;
+                    button.BackColor = DarkButtonBackground;
+                    button.ForeColor = DarkForeground;
                     button.FlatStyle = FlatStyle.Flat;
-                    button.FlatAppearance.BorderColor = Color.FromArgb(80, 80, 80);
+                    button.FlatAppearance.BorderColor = DarkButtonBorder;
                 }
             }
             else if (control is CheckBox checkBox)
@@ -520,7 +528,7 @@ namespace GateSwitchWay
                 }
                 else
                 {
-                    checkBox.ForeColor = Color.LightGray;
+                    checkBox.ForeColor = DarkForeground;
                 }
             }
             else if (control is Label label)
@@ -531,7 +539,7 @@ namespace GateSwitchWay
                 }
                 else
                 {
-                    label.ForeColor = Color.LightGray;
+                    label.ForeColor = DarkForeground;
                 }
             }
             else if (control is NumericUpDown numericUpDown)
@@ -543,8 +551,8 @@ namespace GateSwitchWay
                 }
                 else
                 {
-                    numericUpDown.BackColor = Color.FromArgb(55, 55, 55);
-                    numericUpDown.ForeColor = Color.LightGray;
+                    numericUpDown.BackColor = DarkControlBackground;
+                    numericUpDown.ForeColor = DarkForeground;
                 }
             }
         }
@@ -559,7 +567,7 @@ namespace GateSwitchWay
             }
             else
             {
-                trackBar.BackColor = Color.FromArgb(32, 32, 32);
+                trackBar.BackColor = DarkFormBackground;
             }
         }
 
