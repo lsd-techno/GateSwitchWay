@@ -408,13 +408,12 @@ namespace GateSwitchWay
             TrackBar_Set(isSwitchedOn);
         }
 
-        private static bool currentLightThemeEnabled = false;
         private bool IsLightThemeEnabled()
         {
             var key = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
             var valueName = "AppsUseLightTheme";
 
-            currentLightThemeEnabled = false;
+            bool isLightTheme = false;
             using (var regKey = Registry.CurrentUser.OpenSubKey(key))
             {
                 if (regKey != null)
@@ -422,11 +421,11 @@ namespace GateSwitchWay
                     var value = regKey.GetValue(valueName);
                     if (value != null)
                     {
-                        currentLightThemeEnabled = Convert.ToInt32(value) != 0;
+                        isLightTheme = Convert.ToInt32(value) != 0;
                     }
                 }
             }
-            return currentLightThemeEnabled; // Default to dark theme if unable to read the registry
+            return isLightTheme; // Default to dark theme if unable to read the registry
         }
         private void UpdateContextMenuTheme(ContextMenuStrip contextMenu)
         {
