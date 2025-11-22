@@ -19,7 +19,14 @@
                 clickTimer?.Dispose();
                 
                 // Unsubscribe from system theme changes
-                Microsoft.Win32.SystemEvents.UserPreferenceChanged -= OnSystemThemeChanged;
+                try
+                {
+                    Microsoft.Win32.SystemEvents.UserPreferenceChanged -= OnSystemThemeChanged;
+                }
+                catch
+                {
+                    // Ignore errors during cleanup
+                }
             }
             base.Dispose(disposing);
         }
