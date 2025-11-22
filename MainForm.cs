@@ -15,8 +15,19 @@ namespace GateSwitchWay
         private static bool isLoadingSettings = false;
         private static bool isAutoAlterOn = false;
 
+        // Dark mode color constants
+        private static readonly Color DarkFormBackground = Color.FromArgb(32, 32, 32);        // #202020
+        private static readonly Color DarkGroupBoxBackground = Color.FromArgb(45, 45, 45);    // #2D2D2D
+        private static readonly Color DarkControlBackground = Color.FromArgb(55, 55, 55);     // #373737
+        private static readonly Color DarkButtonBackground = Color.FromArgb(60, 60, 60);      // #3C3C3C
+        private static readonly Color DarkButtonBorder = Color.FromArgb(80, 80, 80);          // #505050
+        private static readonly Color DarkForeground = Color.LightGray;
+
         private NetworkHelper.NetworkInfo currentNetworkInfo;
         private NetworkHelper.NetworkInfo alternativeNetworkInfo;
+
+        // Track the last applied theme to avoid unnecessary reapplications
+        private bool? lastAppliedThemeWasLight = null;
 
         // Auto-refresh timer for network status
         private System.Windows.Forms.Timer autoRefreshTimer = new System.Windows.Forms.Timer();
@@ -24,6 +35,13 @@ namespace GateSwitchWay
         public MainForm()
         {
             InitializeComponent();
+            
+            // Apply initial theme before any other UI operations
+            ApplyThemeToMainForm();
+            
+            // Subscribe to system theme changes
+            Microsoft.Win32.SystemEvents.UserPreferenceChanged += OnSystemThemeChanged;
+            
             isAutoStartOn = AppAutoStart.GetAutoStart();
             autoStartMenu.Checked = isAutoStartOn;
 
@@ -390,13 +408,12 @@ namespace GateSwitchWay
             TrackBar_Set(isSwitchedOn);
         }
 
-        private static bool currentLightThemeEnabled = false;
         private bool IsLightThemeEnabled()
         {
             var key = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
             var valueName = "AppsUseLightTheme";
 
-            currentLightThemeEnabled = false;
+            bool isLightTheme = false;
             using (var regKey = Registry.CurrentUser.OpenSubKey(key))
             {
                 if (regKey != null)
@@ -404,11 +421,11 @@ namespace GateSwitchWay
                     var value = regKey.GetValue(valueName);
                     if (value != null)
                     {
-                        currentLightThemeEnabled = Convert.ToInt32(value) != 0;
+                        isLightTheme = Convert.ToInt32(value) != 0;
                     }
                 }
             }
-            return currentLightThemeEnabled; // Default to dark theme if unable to read the registry
+            return isLightTheme; // Default to dark theme if unable to read the registry
         }
         private void UpdateContextMenuTheme(ContextMenuStrip contextMenu)
         {
@@ -425,6 +442,160 @@ namespace GateSwitchWay
 
             // add dark mode custom renderer to display menu items properly
             contextMenu.Renderer = IsLightThemeEnabled() ? new ToolStripProfessionalRenderer() : new DarkModeToolStripRenderer();
+        }
+
+        private void ApplyThemeToMainForm()
+        {
+            bool isLightTheme = IsLightThemeEnabled();
+            
+            // Only apply theme if it has actually changed to avoid unnecessary UI updates
+            if (lastAppliedThemeWasLight.HasValue && lastAppliedThemeWasLight.Value == isLightTheme)
+            {
+                return;
+            }
+            
+            lastAppliedThemeWasLight = isLightTheme;
+            
+            // Set form colors
+            if (isLightTheme)
+            {
+                this.BackColor = SystemColors.Control;
+                this.ForeColor = SystemColors.ControlText;
+            }
+            else
+            {
+                this.BackColor = DarkFormBackground;
+                this.ForeColor = DarkForeground;
+            }
+
+            // Apply theme to all group boxes
+            ApplyThemeToGroupBox(groupBoxNative, isLightTheme);
+            ApplyThemeToGroupBox(groupBoxAlterNative, isLightTheme);
+            ApplyThemeToGroupBox(groupBoxCurrent, isLightTheme);
+
+            // Apply theme to trackbar
+            ApplyThemeToTrackBar(trackBarToggle, isLightTheme);
+        }
+
+        private void ApplyThemeToGroupBox(GroupBox groupBox, bool isLightTheme)
+        {
+            if (groupBox == null) return;
+
+            if (isLightTheme)
+            {
+                groupBox.BackColor = SystemColors.Control;
+                groupBox.ForeColor = SystemColors.ControlText;
+            }
+            else
+            {
+                groupBox.BackColor = DarkGroupBoxBackground;
+                groupBox.ForeColor = DarkForeground;
+            }
+
+            // Apply theme to all controls within the group box
+            foreach (Control control in groupBox.Controls)
+            {
+                ApplyThemeToControl(control, isLightTheme);
+            }
+        }
+
+        private void ApplyThemeToControl(Control control, bool isLightTheme)
+        {
+            if (control is TextBox textBox)
+            {
+                if (isLightTheme)
+                {
+                    textBox.BackColor = SystemColors.Window;
+                    textBox.ForeColor = SystemColors.WindowText;
+                }
+                else
+                {
+                    textBox.BackColor = DarkControlBackground;
+                    textBox.ForeColor = DarkForeground;
+                }
+            }
+            else if (control is Button button)
+            {
+                if (isLightTheme)
+                {
+                    button.BackColor = SystemColors.Control;
+                    button.ForeColor = SystemColors.ControlText;
+                    button.FlatStyle = FlatStyle.Standard;
+                }
+                else
+                {
+                    button.BackColor = DarkButtonBackground;
+                    button.ForeColor = DarkForeground;
+                    button.FlatStyle = FlatStyle.Flat;
+                    button.FlatAppearance.BorderColor = DarkButtonBorder;
+                }
+            }
+            else if (control is CheckBox checkBox)
+            {
+                if (isLightTheme)
+                {
+                    checkBox.ForeColor = SystemColors.ControlText;
+                }
+                else
+                {
+                    checkBox.ForeColor = DarkForeground;
+                }
+            }
+            else if (control is Label label)
+            {
+                if (isLightTheme)
+                {
+                    label.ForeColor = SystemColors.ControlText;
+                }
+                else
+                {
+                    label.ForeColor = DarkForeground;
+                }
+            }
+            else if (control is NumericUpDown numericUpDown)
+            {
+                if (isLightTheme)
+                {
+                    numericUpDown.BackColor = SystemColors.Window;
+                    numericUpDown.ForeColor = SystemColors.WindowText;
+                }
+                else
+                {
+                    numericUpDown.BackColor = DarkControlBackground;
+                    numericUpDown.ForeColor = DarkForeground;
+                }
+            }
+        }
+
+        private void ApplyThemeToTrackBar(TrackBar trackBar, bool isLightTheme)
+        {
+            if (trackBar == null) return;
+
+            if (isLightTheme)
+            {
+                trackBar.BackColor = SystemColors.Control;
+            }
+            else
+            {
+                trackBar.BackColor = DarkFormBackground;
+            }
+        }
+
+        private void OnSystemThemeChanged(object sender, Microsoft.Win32.UserPreferenceChangedEventArgs e)
+        {
+            // Only respond to theme changes (General category includes theme changes)
+            if (e.Category == Microsoft.Win32.UserPreferenceCategory.General)
+            {
+                // Apply the new theme
+                if (this.InvokeRequired)
+                {
+                    this.BeginInvoke(ApplyThemeToMainForm);
+                }
+                else
+                {
+                    ApplyThemeToMainForm();
+                }
+            }
         }
 
         private void autoStartMenu_Click(object sender, EventArgs e)

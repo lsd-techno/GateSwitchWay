@@ -7,7 +7,7 @@ GateSwitchWay is a simple Windows desktop application that allows users to switc
 - **Start Hidden**: Option to start the application minimized to the system tray.
 - **Auto Alter**: Automatically switch to the alternative network settings on startup.
 - **System Tray Integration**: Control the application from the system tray with single and double-click actions.
-- **Dark Mode Support**: Context menu adapts to the system's light or dark theme.
+- **OS Theme Support**: Main window and context menu automatically adapt to the system's light or dark theme, with real-time theme change detection.
 
 > Note: This fork is an experiment to have the repository largely maintained by a supervised Copilot (AI-assisted). Human reviewers will supervise and review changes before merging. Contributions are welcome; please follow the contribution guidelines.
 
