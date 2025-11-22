@@ -16,15 +16,18 @@ namespace GateSwitchWay
         private static bool isAutoAlterOn = false;
 
         // Dark mode color constants
-        private static readonly Color DarkFormBackground = Color.FromArgb(32, 32, 32);
-        private static readonly Color DarkGroupBoxBackground = Color.FromArgb(45, 45, 45);
-        private static readonly Color DarkControlBackground = Color.FromArgb(55, 55, 55);
-        private static readonly Color DarkButtonBackground = Color.FromArgb(60, 60, 60);
-        private static readonly Color DarkButtonBorder = Color.FromArgb(80, 80, 80);
+        private static readonly Color DarkFormBackground = Color.FromArgb(32, 32, 32);        // #202020
+        private static readonly Color DarkGroupBoxBackground = Color.FromArgb(45, 45, 45);    // #2D2D2D
+        private static readonly Color DarkControlBackground = Color.FromArgb(55, 55, 55);     // #373737
+        private static readonly Color DarkButtonBackground = Color.FromArgb(60, 60, 60);      // #3C3C3C
+        private static readonly Color DarkButtonBorder = Color.FromArgb(80, 80, 80);          // #505050
         private static readonly Color DarkForeground = Color.LightGray;
 
         private NetworkHelper.NetworkInfo currentNetworkInfo;
         private NetworkHelper.NetworkInfo alternativeNetworkInfo;
+
+        // Track the last applied theme to avoid unnecessary reapplications
+        private bool? lastAppliedThemeWasLight = null;
 
         // Auto-refresh timer for network status
         private System.Windows.Forms.Timer autoRefreshTimer = new System.Windows.Forms.Timer();
@@ -445,6 +448,14 @@ namespace GateSwitchWay
         private void ApplyThemeToMainForm()
         {
             bool isLightTheme = IsLightThemeEnabled();
+            
+            // Only apply theme if it has actually changed to avoid unnecessary UI updates
+            if (lastAppliedThemeWasLight.HasValue && lastAppliedThemeWasLight.Value == isLightTheme)
+            {
+                return;
+            }
+            
+            lastAppliedThemeWasLight = isLightTheme;
             
             // Set form colors
             if (isLightTheme)
